@@ -1,0 +1,48 @@
+<div *ngIf="!loaded" class="spinner-wrapper full-area">
+  <div class="spinner">Loading...</div>
+</div>
+
+<div class="row">
+  <div class="col-12 col-md-8 grid-margin stretch-card">
+    <div class="card overflow-hidden">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-10">
+            <div class="titulo">TIPO DE SISTEMA</div>
+            <div class="subtitulo mb-2">Listado de los tipos de sistemas.</div>
+          </div>
+          <div class="col-2">
+            <div class="d-flex justify-content-end">
+              <app-form-type-system
+                class="pr-2"
+                [nombre]="'Creación del tipo de sistema'"
+                (refresh)="setRefresh($event)"
+              ></app-form-type-system>
+              <a 
+                mat-button href="javascript:void(0)" 
+                class="pr-1"
+                data-toggle="tooltip" 
+                data-placement="top" 
+                title="Exportar Tipo de sistema"
+              >
+                <i 
+                  (click)="exportAsExcel()" 
+                  class="feather icon-download" 
+                  style="cursor: pointer;font-size: 20px;color: #C4C4C4;"
+                ></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        <app-tabla-type-system
+          [data]=dataTypeSystem
+          (salida)="setTypeSystem($event)"
+          (refresh)="setRefresh($event)"
+          *ngIf="loaded"
+        ></app-tabla-type-system>
+
+      </div>
+    </div>
+  </div>
+</div>

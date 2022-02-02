@@ -1,0 +1,106 @@
+<ng-template #content let-modal>
+  <div *ngIf=modal>
+    <div class="modal-header d-flex flex-row justify-content-between px-3 pt-2 pb-0 m-0">
+      <h5>{{ nombre }}</h5>
+      <button id="closeModal" type="button" class="close" aria-label="Close" data-backdrop="static" data-keyboard="false" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <form #myForm="ngForm" (ngSubmit)="clickSaveOrUpdate(myForm)" novalidate>
+      <div class="modal-body mt-0">
+
+        <div class="form-group">
+          <label class="control-label">Descripción del evento *</label>
+          <textarea 
+            name="description" 
+            class="form-control form-control-sm" 
+            [(ngModel)]="data.description"
+            placeholder="Descripción del evento"
+            required="true" 
+          ></textarea>
+        </div> 
+        <div class="form-group">
+          <label class="control-label">Notas</label>
+          <textarea 
+            name="notes" 
+            class="form-control form-control-sm" 
+            [(ngModel)]="data.notes"
+            placeholder="Notas"
+          ></textarea>
+        </div> 
+        <div class="form-group">
+          <label class="control-label">Horas</label>
+          <input
+            type="number"
+            name="hours" 
+            class="form-control form-control-sm" 
+            [(ngModel)]="data.hours"
+            placeholder="Horas"
+            min="0"
+          >
+        </div>
+        <div class="form-group">
+          <label class="control-label">Equipo *</label>
+          <ejs-dropdownlist 
+            id='ddlelement1' 
+            class="col-12 p-0" 
+            [dataSource]='responseEquipment'
+            [fields]="{ text: 'name', value: 'id' }"
+            [(value)]='data.equipment_id'
+          ></ejs-dropdownlist>
+        </div>
+        <div class="form-group">
+          <label class="control-label">Planta *</label>
+          <ejs-dropdownlist 
+            id='ddlelement1' 
+            class="col-12 p-0" 
+            [dataSource]='responsePlant'
+            [fields]="{ text: 'name', value: 'id' }"
+            [(value)]='data.plant_id'
+          ></ejs-dropdownlist>
+        </div>
+
+        <div>
+          <ngb-alert [type]="'success'" *ngIf="message != ''"><div [innerHtml]="message"></div></ngb-alert>
+          <ngb-alert [type]="'warning'" *ngIf="error != ''"><div [innerHtml]="error"></div></ngb-alert>
+        </div>
+
+      </div>
+      <div class="modal-footer d-flex justify-content-between">
+        <div class="flex-col flex-nowrap justify-content-center text-xs"></div>
+        <button type="submit" class="btn btn-outline-dark btn-sm" [disabled]="data.load">
+          Guardar
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<a 
+  mat-button href="javascript:void(0)" 
+  class="pr-1"
+  data-toggle="tooltip" 
+  data-placement="top" 
+  title="Crear Tipo de sistema"
+  *ngIf=!update
+>
+  <i 
+    (click)="open(content)"
+    class="feather icon-plus"
+    style="cursor: pointer;font-size: 20px;color: #C4C4C4;"
+  ></i>
+</a>
+<a 
+  mat-button href="javascript:void(0)" 
+  class="pr-1"
+  data-toggle="tooltip" 
+  data-placement="top" 
+  title="Editar Tipo de sistema"
+  *ngIf=update
+>
+  <i 
+    (click)="open(content)"
+    class="feather icon-edit"
+    style="cursor: pointer;font-size: 20px;color: #C4C4C4;"
+  ></i>
+</a>

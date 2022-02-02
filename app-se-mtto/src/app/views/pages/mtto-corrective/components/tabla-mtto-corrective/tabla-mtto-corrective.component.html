@@ -1,0 +1,67 @@
+<div #TABLE style="display: none">
+  <div class="table-responsive mt-3">
+    <table class="table table-sm">
+      <thead>
+        <tr class="font-overpass">
+          <th class="text-left" style="width:5%">#</th>
+          <th class="text-left" style="width:25%">Descripción</th>
+          <th class="text-left" style="width:25%">Notas</th>
+          <th class="text-left" style="width:25%">Equipo</th>
+          <th class="text-center" style="width:10%">Planta</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let element of datos" style="cursor: pointer">
+          <td class="text-left">{{ element.id }}</td>
+          <td class="text-left">{{ element.description }}</td>
+          <td class="text-left">{{ element.notes }}</td>
+          <td class="text-left">{{ element.equipment_name }}</td>
+          <td class="text-center">{{ element.plant_name }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="table-responsive mt-3">
+  <table class="table table-sm">
+    <thead>
+      <tr class="font-overpass">
+        <th class="text-left" style="width:5%">#</th>
+        <th class="text-left" style="width:35%">Descripción</th>
+        <th class="text-left" style="width:35%">Notas</th>
+        <th class="text-left" style="width:10%">Equipo</th>
+        <th class="text-center" style="width:10%">Planta</th>
+        <th class="text-center" style="width:5%">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        class="text-left text-md"
+        *ngFor="
+          let element of datos
+            | slice: (page - 1) * pageSize:(page - 1) * pageSize + pageSize
+        "
+      >
+        <td class="text-left">{{ element.id }}</td>
+        <td class="text-left">{{ element.description }}</td>
+        <td class="text-left">{{ element.notes }}</td>
+        <td class="text-left">{{ element.equipment_name }}</td>
+        <td class="text-center">{{ element.plant_name }}</td>
+        <td class="text-center pt-1">
+          <app-form-mtto-corrective
+            class="pr-2"
+            [nombre]="'Edición del mantenimiento correctivo'"
+            [data]="element"
+            [update]="true"
+            (refresh)="setRefresh($event)"
+          ></app-form-mtto-corrective>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<ngb-pagination
+  [collectionSize]="datos.length"
+  [pageSize]="pageSize"
+  [(page)]="page"
+></ngb-pagination>

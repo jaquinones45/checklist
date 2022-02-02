@@ -1,0 +1,45 @@
+.color-green {
+  background: #34db43;
+}
+.color-green:hover {
+  background: rgb(0, 190, 0);
+}
+.color-blue {
+  background: #1561C0;
+}
+.color-blue:hover {
+  background: #0053b8;
+}
+
+.color-yellow {
+  background: #f2c94c;
+}
+.color-yellow:hover {
+  background: #e0b533;
+}
+
+.color-orange {
+  background: orange;
+}
+.color-orange:hover {
+  background: rgb(202, 131, 0);
+}
+
+.color-red {
+  background: #ff3c5f;
+}
+.color-red:hover {
+  background: #fd1f48;
+}
+.color-red-oscurecedor::before {
+  background-color: rgba(0,0,0,0.6);
+  background: #fd1f48;
+}
+
+
+.text-red {
+  color: #ff3c5f;
+}
+.text-green {
+  color: #34db43;
+}

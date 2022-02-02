@@ -1,0 +1,72 @@
+<div #TABLE style="display: none">
+  <div class="table-responsive mt-3">
+    <table class="table table-sm">
+      <thead>
+        <tr class="font-overpass">
+          <th class="text-left" style="width:5%">#</th>
+          <th class="text-left" style="width:25%">Nombre</th>
+          <th class="text-left" style="width:25%">Planta</th>
+          <th class="text-left" style="width:25%">Última revision</th>
+          <th class="text-center" style="width:10%">Cant. revision</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let element of datos" style="cursor: pointer">
+          <td class="text-left">{{ element.id }}</td>
+          <td class="text-left">{{ element.name }}</td>
+          <td class="text-left">{{ element.planta }}</td>
+          <td class="text-left">{{ element.last_date | date: 'yyyy-MM-dd HH:mm' }}</td>
+          <td class="text-center">{{ element.quantity_revision }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="table-responsive mt-3">
+  <table class="table table-sm">
+    <thead>
+      <tr class="font-overpass">
+        <th class="text-left" style="width:5%">#</th>
+        <th class="text-left" style="width:25%">Nombre</th>
+        <th class="text-left" style="width:25%">Planta</th>
+        <th class="text-left" style="width:25%">Última revision</th>
+        <th class="text-center" style="width:10%">Cant. revision</th>
+        <th class="text-center" style="width:10%">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        class="text-left text-md"
+        *ngFor="
+          let element of datos
+            | slice: (page - 1) * pageSize:(page - 1) * pageSize + pageSize
+        "
+      >
+      <td class="text-left">{{ element.id }}</td>
+      <td class="text-left">{{ element.name }}</td>
+      <td class="text-left">{{ element.planta }}</td>
+      <td class="text-left">{{ element.last_date | date: 'yyyy-MM-dd HH:mm' }}</td>
+      <td class="text-center">{{ element.quantity_revision }}</td>
+        <td class="text-center pt-1">
+          <app-form-type-system
+            class="pr-2"
+            [nombre]="'Edición del tipo de sistema'"
+            [data]="element"
+            [update]="true"
+            (refresh)="setRefresh($event)"
+          ></app-form-type-system>
+          <i 
+            (click)="redirectRevision(element.id)"
+            class="feather icon-log-out pl-1"
+            style="cursor: pointer;font-size: 20px;color: #C4C4C4;"
+          ></i>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<ngb-pagination
+  [collectionSize]="datos.length"
+  [pageSize]="pageSize"
+  [(page)]="page"
+></ngb-pagination>

@@ -1,0 +1,16 @@
+.textBox {
+  min-width: 125px;
+  min-height: 20px;
+  overflow: hidden;
+  position: relative;
+}
+.textBox span {
+  position: absolute;
+  top: 25%;
+  white-space: nowrap;
+  transform: translateX(0);
+  transition: 2.5s;
+}
+.textBox:hover span {
+  transform: translateX(calc(125px - 100%));
+}

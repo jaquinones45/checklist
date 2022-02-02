@@ -1,0 +1,71 @@
+<div #TABLE style="display: none">
+  <div class="table-responsive mt-3">
+    <table class="table table-sm">
+      <thead>
+        <tr class="font-overpass">
+          <th class="text-left" style="width:5%">#</th>
+          <th class="text-left" style="width:25%">Nombre</th>
+          <th class="text-left" style="width:25%">Componente</th>
+          <th class="text-left" style="width:25%">País</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let element of datos" style="cursor: pointer">
+          <td class="text-left">{{ element.id }}</td>
+          <td class="text-left">{{ element.name }}</td>
+          <td class="text-left">{{ element.type_component_name }}</td>
+          <td class="text-left">{{ element.country_name }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="table-responsive mt-3">
+  <table class="table table-sm">
+    <thead>
+      <tr class="font-overpass">
+        <th class="text-left" style="width:5%">#</th>
+        <th class="text-left" style="width:25%">Nombre</th>
+        <th class="text-left" style="width:25%">Componente</th>
+        <th class="text-left" style="width:25%">País</th>
+        <th class="text-center" style="width:10%">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        class="text-left text-md"
+        *ngFor="let element of datos | slice: (page - 1) * pageSize:(page - 1) * pageSize + pageSize"
+      >
+        <td class="text-left">{{ element.id }}</td>
+        <td class="text-left">{{ element.name }}</td>
+        <td class="text-left">{{ element.type_component_name }}</td>
+        <td class="text-left">{{ element.country_name }}</td>
+        <td class="text-center pt-1">
+          <a 
+            mat-button href="javascript:void(0)" 
+            data-toggle="tooltip" 
+            data-placement="top" 
+            title="Agregar preguntas"
+          >
+            <i 
+              (click)="setSalidaData(element.id)"
+              class="feather icon-settings pr-1"
+              style="cursor: pointer;font-size: 20px;color: #C4C4C4;"
+            ></i>
+          </a>
+          <app-form-form
+            [nombre]="'Edición de la lista de revisión'"
+            [data]="element"
+            [update]="true"
+            (refresh)="setRefresh($event)"
+          ></app-form-form>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<ngb-pagination
+  [collectionSize]="datos.length"
+  [pageSize]="pageSize"
+  [(page)]="page"
+></ngb-pagination>

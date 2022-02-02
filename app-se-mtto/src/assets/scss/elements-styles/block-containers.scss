@@ -1,0 +1,37 @@
+.container-flex-m {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+.c-f-r {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+#porcentaje-estacion > .values {
+  width: 25%;
+}
+
+#porcentaje-estacion > .barra {
+  width: 75%;
+}
+
+.f-d-r{
+  flex-direction: row;
+}
+
+.f-d-c{
+  flex-direction: column;
+}
+
+.c-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

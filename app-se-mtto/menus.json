@@ -1,0 +1,109 @@
+//OCENSA
+[
+  {"nombre":"SA",
+  "menu":[
+    {"table":"el_porvenir","plant":"el_porvenir","pbaja":"3"},
+    {"table":"cusiana","plant":"cusiana","pbaja":"3"},
+    {"table":"caucasia","plant":"caucasia","pbaja":"3"},
+    {"table":"miraflores","plant":"miraflores","pbaja":"3"},
+    {"table":"chiquillo","plant":"chiquillo","pbaja":"3"},
+    {"table":"la_belleza","plant":"la_belleza","pbaja":"3"},
+    {"table":"la_granjita","plant":"la_granjita","pbaja":"3"},
+    {"table":"paez","plant":"paez","pbaja":"3"}
+  ]}
+]
+
+
+//IRISA
+[
+  {"nombre":"SA",
+  "menu":[
+    {"table":"irisa","plant":"cogeneracion","pbaja":"3"},
+    {"table":"irisa","plant":"fabrica","pbaja":"3"},
+    {"table":"irisa","plant":"destileria","pbaja":"3"}
+  ]}
+]
+
+//INGREDION
+[
+  {"nombre":"SA",
+  "menu":[
+    {"table":"ingredion","plant":"proceso_humedo","pbaja":"3"},
+    {"table":"ingredion","plant":"cogeneracion","pbaja":"3"},
+    {"table":"ingredion","plant":"hfcs","pbaja":"3"},
+    {"table":"ingredion","plant":"rare_sugar","pbaja":"3"},
+    {"table":"ingredion","plant":"almidones_modificados_pregeles","pbaja":"3"}
+  ]}
+]
+
+//GRB
+[
+  {"nombre":"ALQUILACION",
+  "menu":[
+    {"table":"alquilacion","plant":"alkilacion","pbaja":"4"}
+  ]},
+  {"nombre":"MODELO IV",
+  "menu":[
+    {"table":"modelo_iv","plant":"modelo_iv","pbaja":"4"},
+    {"table":"modelo_iv","plant":"acido","pbaja":"4"}
+    
+  ]},
+  {"nombre":"NGLP",
+  "menu":[
+    {"table":"nglp","plant":"nglp","pbaja":"3"}
+  ]},
+  {"nombre":"PARAFINAS",
+  "menu":[
+    {"table":"parafinas","plant":"sur_fenol","pbaja":"4"},
+    {"table":"parafinas","plant":"norte_filtros","pbaja":"4"}
+  ]},
+  {"nombre":"POLIETILENO",
+  "menu":[
+    {"table":"polietileno","plant":"polietileno_i_ii","pbaja":"4"},
+    {"table":"polietileno","plant":"transferencia","pbaja":"4"}
+  ]},
+  {"nombre":"PTAR",
+  "menu":[
+    {"table":"ptar","plant":"ptar","pbaja":"4"}
+  ]},
+  {"nombre":"TOPPING",
+  "menu":[
+    {"table":"topping","plant":"nicho_1","pbaja":"4"},
+    {"table":"topping","plant":"nicho_2","pbaja":"4"},
+    {"table":"topping","plant":"nicho_3","pbaja":"4"}
+  ]},
+  {"nombre":"UOP I",
+  "menu":[
+    {"table":"uop_i","plant":"bloque_3","pbaja":"3"},
+    {"table":"uop_i","plant":"bloque_4","pbaja":"3"}
+  ]},
+  {"nombre":"UOP II",
+  "menu":[
+    {"table":"uop_ii","plant":"bloque_a","pbaja":"4"},
+    {"table":"uop_ii","plant":"bloque_b","pbaja":"4"}
+  ]},
+  {"nombre":"HDT",
+  "menu":[
+    {"table":"hdt","plant":"U4650","pbaja":"4"},
+    {"table":"hdt","plant":"U4700_50","pbaja":"4"}
+  ]}
+]
+
+//BAHIAGAS
+[
+  {"nombre":"SA",
+  "menu":[
+    {"table":"bahiagas","plant":"ALAGOINHAS","pbaja":"3"},
+    {"table":"bahiagas","plant":"CAMACARI","pbaja":"3"},
+    {"table":"bahiagas","plant":"CANDEIAS","pbaja":"3"},
+    {"table":"bahiagas","plant":"CATU","pbaja":"3"},
+    {"table":"bahiagas","plant":"DIAS_DE_AVILA","pbaja":"3"},
+    {"table":"bahiagas","plant":"FEIRA_DE_SANTANA","pbaja":"3"},
+    {"table":"bahiagas","plant":"ILHEUS","pbaja":"3"},
+    {"table":"bahiagas","plant":"ITABUNA","pbaja":"3"},
+    {"table":"bahiagas","plant":"MUCURI","pbaja":"3"},
+    {"table":"bahiagas","plant":"POLO_PETROQUIMICO","pbaja":"3"},
+    {"table":"bahiagas","plant":"SALVADOR","pbaja":"3"},
+     {"table":"bahiagas","plant":"SIMOES_FILHO","pbaja":"3"}
+  ]}
+]

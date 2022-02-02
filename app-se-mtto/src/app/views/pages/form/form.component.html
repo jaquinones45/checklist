@@ -1,0 +1,93 @@
+<div *ngIf="!loaded" class="spinner-wrapper full-area">
+  <div class="spinner">Loading...</div>
+</div>
+
+<div class="row">
+  <div class="col-12 col-md-6 grid-margin stretch-card">
+    <div class="card overflow-hidden">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-10">
+            <div class="titulo">LISTA DE REVISIONES</div>
+            <div class="subtitulo mb-2">Listado de las revisiones del sistema.</div>
+          </div>
+          <div class="col-2">
+            <div class="d-flex justify-content-end">
+              <app-form-form
+                class="pr-2"
+                [nombre]="'Creación de la lista de revisión'"
+                (refresh)="setRefresh($event)"
+              ></app-form-form>
+              <a 
+                mat-button href="javascript:void(0)" 
+                class="pr-1"
+                data-toggle="tooltip" 
+                data-placement="top" 
+                title="Exportar Lista de revisión"
+              >
+                <i 
+                  (click)="exportAsExcel()" 
+                  class="feather icon-download" 
+                  style="cursor: pointer;font-size: 20px;color: #C4C4C4;"
+                ></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        <app-tabla-form
+          [data]=dataForm
+          (salida)="setForm($event)"
+          (refresh)="setRefresh($event)"
+          (salidaData)="setSalidaData($event)"
+          *ngIf="loaded"
+        ></app-tabla-form>
+
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-6 grid-margin stretch-card">
+    <div class="card overflow-hidden">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-10">
+            <div class="titulo uppercase">LISTA DE REVISIONES</div>
+            <div class="subtitulo mb-2">Listado de las revisiones del sistema.</div>
+          </div>
+          <div class="col-2">
+            <div class="d-flex justify-content-end">
+              <app-form-form
+                class="pr-2"
+                [nombre]="'Creación de la lista de revisión'"
+                (refresh)="setRefresh($event)"
+              ></app-form-form>
+              <a 
+                mat-button href="javascript:void(0)" 
+                class="pr-1"
+                data-toggle="tooltip" 
+                data-placement="top" 
+                title="Exportar Lista de revisión"
+              >
+                <i 
+                  (click)="exportAsExcel()" 
+                  class="feather icon-download" 
+                  style="cursor: pointer;font-size: 20px;color: #C4C4C4;"
+                ></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        <app-tabla-form-question
+          [data]=dataOneForm
+          (salida)="setForm($event)"
+          (refresh)="setRefresh($event)"
+          
+          *ngIf="dataOneForm.length > 0"
+        ></app-tabla-form-question>
+        <div *ngIf="dataOneForm.length == 0">No tienes preguntas asociadas a la lista de revisión seleccionada.</div>
+
+      </div>
+    </div>
+  </div>
+</div>

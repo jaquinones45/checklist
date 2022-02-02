@@ -1,0 +1,38 @@
+<div class="card-body">
+  <div class="row">
+    <div class="col-10">
+      <div class="titulo">EQUIPOS</div>
+      <div class="subtitulo mb-2">Listado de los equipos.</div>
+    </div>
+    <div class="col-2">
+      <div class="d-flex justify-content-end">
+        <app-form-module-equipment
+          class="pr-2"
+          [nombre]="'Creación del equipo'"
+          (refresh)="setRefresh($event)"
+        ></app-form-module-equipment>
+        <a 
+          mat-button href="javascript:void(0)" 
+          class="pr-1"
+          data-toggle="tooltip" 
+          data-placement="top" 
+          title="Exportar Tipo de sistema"
+        >
+          <i 
+            (click)="exportAsExcel()" 
+            class="feather icon-download" 
+            style="cursor: pointer;font-size: 20px;color: #C4C4C4;"
+          ></i>
+        </a>
+      </div>
+    </div>
+  </div>
+  
+  <app-tabla-module-equipment
+    [data]=dataEquipment
+    (salida)="setEquipment($event)"
+    (refresh)="setRefresh($event)"
+    *ngIf="loaded"
+  ></app-tabla-module-equipment>
+
+</div>

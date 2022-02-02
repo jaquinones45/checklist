@@ -1,0 +1,52 @@
+<div *ngIf="!loaded" class="spinner-wrapper full-area">
+  <div class="spinner">Loading...</div>
+</div>
+
+<div class="row">
+  <div class="col-12 col-md-12 grid-margin stretch-card">
+    <div class="card overflow-hidden">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-10">
+            <div class="titulo">RUTINA DE MANTENIMIENTO</div>
+            <div class="subtitulo mb-2">Módulo de rutina de mantenimiento.</div>
+          </div>
+          <div class="col-2">
+            <div class="d-flex justify-content-end">
+              <a mat-button href="javascript:void(0)">
+                <i 
+                  (click)="exportAsExcel()" 
+                  class="feather icon-download" 
+                  style="cursor: pointer;font-size: 20px;color: #C4C4C4;"
+                ></i>
+              </a>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="d-flex justify-content flex-row align-items-center">
+
+              <svg width="17" height="17" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="8" cy="8" r="5" fill="#b7b8b9"/>          
+              </svg>
+              <div class="d-felx font-normal ml-1 mr-2" style="color: #828282 !important;" style="font-size: 14px; font-weight: 400!important;">Preliminar</div>
+            
+              <svg width="17" height="17" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="8" cy="8" r="5" fill="#28a745"/>          
+              </svg>
+              <div class="d-felx font-normal ml-1 mr-2" style="color: #828282 !important;" style="font-size: 14px; font-weight: 400!important;">Completo</div>
+             
+            </div>
+          </div>
+        </div>
+        
+        <app-tabla-routine-mtto 
+          [data]=dataRoutineMtto
+          (salida)="setRoutineMtto($event)"
+          (refresh)="setRefresh($event)"
+          *ngIf="loaded"
+        ></app-tabla-routine-mtto>
+
+      </div>
+    </div>
+  </div>
+</div>

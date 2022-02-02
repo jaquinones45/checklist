@@ -1,0 +1,48 @@
+<div *ngIf="!loaded" class="spinner-wrapper full-area">
+  <div class="spinner">Loading...</div>
+</div>
+
+<div class="row">
+  <div class="col-12 col-md-6 grid-margin stretch-card">
+    <div class="card overflow-hidden">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-10">
+            <div class="titulo">CLIENTES</div>
+            <div class="subtitulo mb-2">Listado de los clientes del sistema.</div>
+          </div>
+          <div class="col-2">
+            <div class="d-flex justify-content-end">
+              <app-form-client
+                class="pr-2"
+                [nombre]="'Creación del cliente'"
+                (refresh)="setRefresh($event)"
+              ></app-form-client>
+              <a 
+                mat-button href="javascript:void(0)" 
+                class="pr-1"
+                data-toggle="tooltip" 
+                data-placement="top" 
+                title="Exportar Clientes"
+              >
+                <i 
+                  (click)="exportAsExcel()" 
+                  class="feather icon-download" 
+                  style="cursor: pointer;font-size: 20px;color: #C4C4C4;"
+                ></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        <app-tabla-client
+          [data]=dataClient
+          (salida)="setClient($event)"
+          (refresh)="setRefresh($event)"
+          *ngIf="loaded"
+        ></app-tabla-client>
+
+      </div>
+    </div>
+  </div>
+</div>

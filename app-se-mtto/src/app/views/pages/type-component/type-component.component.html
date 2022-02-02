@@ -1,0 +1,48 @@
+<div *ngIf="!loaded" class="spinner-wrapper full-area">
+  <div class="spinner">Loading...</div>
+</div>
+
+<div class="row">
+  <div class="col-12 col-md-6 grid-margin stretch-card">
+    <div class="card overflow-hidden">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-10">
+            <div class="titulo">LISTA DE COMPONENTES</div>
+            <div class="subtitulo mb-2">Listado de las componentes del sistema.</div>
+          </div>
+          <div class="col-2">
+            <div class="d-flex justify-content-end">
+              <app-form-type-component
+                class="pr-2"
+                [nombre]="'Creación del componente'"
+                (refresh)="setRefresh($event)"
+              ></app-form-type-component>
+              <a 
+                mat-button href="javascript:void(0)" 
+                class="pr-1"
+                data-toggle="tooltip" 
+                data-placement="top" 
+                title="Exportar Formes"
+              >
+                <i 
+                  (click)="exportAsExcel()" 
+                  class="feather icon-download" 
+                  style="cursor: pointer;font-size: 20px;color: #C4C4C4;"
+                ></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        <app-tabla-type-component
+          [data]=dataTypeComponent
+          (salida)="setTypeComponent($event)"
+          (refresh)="setRefresh($event)"
+          *ngIf="loaded"
+        ></app-tabla-type-component>
+
+      </div>
+    </div>
+  </div>
+</div>

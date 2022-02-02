@@ -1,0 +1,22 @@
+<div class="main-wrapper">
+  <app-sidebar></app-sidebar>
+
+  <div class="page-wrapper">
+    <app-navbar></app-navbar>
+
+    <div class="page-content p-3">
+ 
+
+      <!-- Spinner for lazyload modules -->
+      <div *ngIf="isLoading" class="spinner-wrapper">
+        <div class="spinner">Loading...</div>
+      </div>
+
+      <div contentAnimate *ngIf="!isLoading">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+
+    <app-footer></app-footer>
+  </div>
+</div>

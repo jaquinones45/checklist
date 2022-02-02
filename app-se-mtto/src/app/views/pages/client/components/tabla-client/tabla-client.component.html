@@ -1,0 +1,75 @@
+<div #TABLE style="display: none">
+  <div class="table-responsive mt-3">
+    <table class="table table-sm">
+      <thead>
+        <tr class="font-overpass">
+          <th class="text-left" style="width:5%">#</th>
+          <th class="text-left" style="width:25%">Nombre</th>
+          <th class="text-center" style="width:25%">Cant. Plantas</th>
+          <th class="text-center" style="width:25%">Cant. Componentes</th>
+          <th class="text-center" style="width:25%">Cant. Equipos</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let element of datos" style="cursor: pointer">
+          <td class="text-left">{{ element.id }}</td>
+          <td class="text-left">{{ element.name }}</td>
+          <td class="text-center">{{ element.count_plant }}</td>
+          <td class="text-center">{{ element.count_component }}</td>
+          <td class="text-center">{{ element.count_equipment }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="table-responsive mt-3">
+  <table class="table table-sm">
+    <thead>
+      <tr class="font-overpass">
+        <th class="text-left" style="width:5%">#</th>
+        <th class="text-left" style="width:25%">Nombre</th>
+        <th class="text-center" style="width:25%">Cant. Plantas</th>
+        <th class="text-center" style="width:25%">Cant. Componentes</th>
+        <th class="text-center" style="width:25%">Cant. Equipos</th>
+        <th class="text-center" style="width:10%">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        class="text-left text-md"
+        *ngFor="let element of datos | slice: (page - 1) * pageSize:(page - 1) * pageSize + pageSize"
+      >
+        <td class="text-left">{{ element.id }}</td>
+        <td class="text-left">{{ element.name }}</td>
+        <td class="text-center">{{ element.count_plant }}</td>
+        <td class="text-center">{{ element.count_component }}</td>
+        <td class="text-center">{{ element.count_equipment }}</td>
+        <td class="text-center pt-1">
+          <a 
+            mat-button href="javascript:void(0)" 
+            data-toggle="tooltip" 
+            data-placement="top" 
+            title="Configurar el cliente"
+          >
+            <i 
+              (click)="redirectConfig(element.id)"
+              class="feather icon-settings pr-1"
+              style="cursor: pointer;font-size: 20px;color: #C4C4C4;"
+            ></i>
+          </a>
+          <app-form-client
+            [nombre]="'Edición del cliente'"
+            [data]="element"
+            [update]="true"
+            (refresh)="setRefresh($event)"
+          ></app-form-client>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<ngb-pagination
+  [collectionSize]="datos.length"
+  [pageSize]="pageSize"
+  [(page)]="page"
+></ngb-pagination>

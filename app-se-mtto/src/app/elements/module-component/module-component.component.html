@@ -1,0 +1,38 @@
+<div class="card-body">
+  <div class="row">
+    <div class="col-10">
+      <div class="titulo">COMPONENTES</div>
+      <div class="subtitulo mb-2">Listado de los componentes.</div>
+    </div>
+    <div class="col-2">
+      <div class="d-flex justify-content-end">
+        <app-form-module-component
+          class="pr-2"
+          [nombre]="'Creación del componente'"
+          (refresh)="setRefresh($event)"
+        ></app-form-module-component>
+        <a 
+          mat-button href="javascript:void(0)" 
+          class="pr-1"
+          data-toggle="tooltip" 
+          data-placement="top" 
+          title="Exportar Componentes"
+        >
+          <i 
+            (click)="exportAsExcel()" 
+            class="feather icon-download" 
+            style="cursor: pointer;font-size: 20px;color: #C4C4C4;"
+          ></i>
+        </a>
+      </div>
+    </div>
+  </div>
+  
+  <app-tabla-module-component
+    [data]=dataComponent
+    (salida)="setComponent($event)"
+    (refresh)="setRefresh($event)"
+    *ngIf="loaded"
+  ></app-tabla-module-component>
+
+</div>
