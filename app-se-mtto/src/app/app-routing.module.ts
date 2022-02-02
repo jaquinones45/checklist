@@ -14,10 +14,10 @@ const routes: Routes = [
   {
     path: "",
     component: BaseComponent,
-    canActivate: [], //AuthGuard
+    canActivate: [AuthGuard],
     children: [
       {
-        path: "",
+        path: "dashboard",
         runGuardsAndResolvers: "always",
         loadChildren: () =>
           import("./views/pages/dashboard/dashboard.module").then(
@@ -144,6 +144,7 @@ const routes: Routes = [
             (m) => m.TypeComponentModule
           ),
       },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' }, 
       
     ],
   },
@@ -162,6 +163,7 @@ const routes: Routes = [
     path: "error/:type",
     component: ErrorPageComponent,
   },
+  { path: '**', redirectTo: 'error', pathMatch: 'full' }
   /*   { path: '**', redirectTo: 'migracion/oleoducto', pathMatch: 'full' },
     { path: '', redirectTo: 'migracion/oleoducto', pathMatch: 'full' } */
 ];

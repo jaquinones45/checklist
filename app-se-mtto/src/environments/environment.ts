@@ -1,5 +1,5 @@
 export const environment = {
   production: false,
-  url: 'http://localhost:3500/api/',
+  url: 'http://23.101.183.148/api-se-mtto/api/',
   virtualPath: "",
 };
