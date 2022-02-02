@@ -288,14 +288,21 @@ router.route("/api/component").post(component.saveComponent);
 router.route("/api/component/:id").put(component.updateComponent);
 
 /**
-  * Api Componente
+  * Api Cliente
+  * @query {string} name  el nombre del equipo a filtrar.
+  * @query {int} client_id el id del equipo a filtrar.
+*/
+router.route("/api/client/getCountryName").get(client.getCountryName);
+
+/**
+  * Api Cliente
   * @query {string} name  el nombre del equipo a filtrar.
   * @query {int} client_id el id del equipo a filtrar.
 */
 router.route("/api/client").get(client.getClient);
 
 /**
- * Api Componente
+ * Api Cliente
  * @body {string} name el nombre del equipo a filtrar.
  * @body {string} name el id de la planta a filtrar.
  * @body {int} client_id el id del equipo a filtrar.
@@ -303,7 +310,7 @@ router.route("/api/client").get(client.getClient);
 router.route("/api/client").post(client.saveClient);
 
 /**
-  * Api Componente
+  * Api Cliente
   * @param {int} id el id del equipo a filtrar.
   * @body {string} name el nombre del equipo a filtrar.
   * @body {int} client_id el id del equipo a filtrar.

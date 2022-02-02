@@ -17,21 +17,21 @@ export class FormClientComponent {
   plants: any = []
   @Input() id
   @Input() nombre
-  @Input() data = {id: null, name: '', load: false}
+  @Input() data = {id: null, name: '', country_id: null, load: false}
   @Input() update: boolean = false
   @Output() refresh = new EventEmitter<any>();
   
   loadRefreshPage = false
 
   public localFields: Object = { text: 'name' }
-  loadPlant: boolean;
-  responsePlant: any;
+  loadCountry: boolean;
+  responseCountry: any;
   message: string = '';
   error: string = '';
 
   constructor(
     private modalService: NgbModal, 
-    private typeSystemService: ClientService,
+    private clientService: ClientService,
     private config: NgbModalConfig
     ) {
       this.config.backdrop = 'static';
@@ -58,7 +58,9 @@ export class FormClientComponent {
     this.message = ''
     this.error = ''
 
-    if (!this.update) this.data = {id: null, name: '', load: false}
+    this.getCountryName()
+
+    if (!this.update) this.data = {id: null, name: '', country_id: null, load: false}
 
     this.modalService.open(content,
       { centered: true, ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
@@ -79,6 +81,16 @@ export class FormClientComponent {
     }
   }
 
+  getCountryName() {
+    this.loadCountry = false
+    this.clientService
+      .getCountryName()
+      .subscribe((res:any) => {
+        this.responseCountry = res.data;
+        this.loadCountry = true
+      });
+  }
+
   clickSaveOrUpdate(form: NgForm) {
     if(!form.valid) {
       return false;
@@ -87,7 +99,7 @@ export class FormClientComponent {
       this.error = ''
       this.data.load = true
       if (!this.update) {
-        this.typeSystemService
+        this.clientService
           .saveClient(this.data)
           .subscribe((response:any) => {
             this.loadRefreshPage = true;
@@ -97,7 +109,7 @@ export class FormClientComponent {
               this.modal = false
               setTimeout( () => {
                 document.getElementById("closeModal").click()
-                this.data = {id: null, name: '', load: false}
+                this.data = {id: null, name: '', country_id: null, load: false}
               }, 2000 )
             } else {
               this.data.load = false
@@ -109,7 +121,7 @@ export class FormClientComponent {
             console.log(error);
           })
       } else {
-        this.typeSystemService
+        this.clientService
           .updateClient(this.data)
           .subscribe((response:any) => {
             this.loadRefreshPage = true;
@@ -119,7 +131,7 @@ export class FormClientComponent {
               this.modal = false
               setTimeout( () => {
                 document.getElementById("closeModal").click()
-                this.data = {id: null, name: '', load: false}
+                this.data = {id: null, name: '', country_id: null, load: false}
               }, 2000 )
             } else {
               this.data.load = false

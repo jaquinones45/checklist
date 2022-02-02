@@ -2,6 +2,28 @@ import db from "../config/database";
 
 class clientModel {
 
+  static async getCountryNameDB(): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const conn = await db.connect();
+        const query = `
+          SELECT 
+            [country].id, 
+            [country].name
+          FROM [country]
+          WHERE [country].deleted = 0 
+          ORDER BY [country].id DESC
+        `;
+        const result = await conn.query(query);
+        // retornar los datos
+        resolve(result.recordset);
+      } catch (error) {
+        console.error("An error ocurred getCountryNameDB: ", error);
+        reject(error);
+      }
+    });
+  }
+
   static async getClientDB(
     name:any | undefined, 
   ): Promise<any> {

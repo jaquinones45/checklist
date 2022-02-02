@@ -19,7 +19,17 @@
             placeholder="Nombre"
             required="true" 
           >
-        </div> 
+        </div>
+        <div class="form-group">
+          <label class="control-label">País *</label>
+          <ejs-dropdownlist 
+            id='ddlelement1' 
+            class="col-12 p-0" 
+            [dataSource]='responseCountry'
+            [fields]="{ text: 'name', value: 'id' }"
+            [(value)]='data.country_id'
+          ></ejs-dropdownlist>
+        </div>
 
         <div>
           <ngb-alert [type]="'success'" *ngIf="message != ''"><div [innerHtml]="message"></div></ngb-alert>

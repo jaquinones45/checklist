@@ -3,6 +3,17 @@ import { StatusCodes } from "http-status-codes";
 import clientController from "../controllers/client.controller";
 const { OK, EXPECTATION_FAILED } = StatusCodes;
 
+const getCountryName = async (req: Request, res: Response): Promise<Response | void> => {
+  try {
+    const { name } = req.query
+    const result = await clientController.getCountryName();
+    res.status(OK).json({data: result, success: true})
+  } catch (error) {
+    console.error("An error ocurred getCountryName: ",error);
+    res.status(EXPECTATION_FAILED).json({ message: "Error, ocurrio un problema en la solicitud" });
+  }
+}
+
 const getClient = async (req: Request, res: Response): Promise<Response | void> => {
   try {
     const { name } = req.query
@@ -67,6 +78,7 @@ const getSelectAll = async (req: Request, res: Response): Promise<Response | voi
 }
 
 export default {
+  getCountryName,
   getClient,
   saveClient,
   updateClient,

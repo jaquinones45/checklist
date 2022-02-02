@@ -4,6 +4,18 @@ import _ from "lodash"
 
 class clientController {
 
+  static async getCountryName(): Promise<object> {
+    return new Promise( async (resolve, reject) => {
+      try {
+        const res = await clientModel.getCountryNameDB()
+        resolve(res);
+      } catch (error) {
+        console.error("An error ocurred getCountryName: ",error);
+        reject(error);
+      }
+    })
+  }
+
   static async getClient(
     name:any | undefined, 
   ): Promise<object> {

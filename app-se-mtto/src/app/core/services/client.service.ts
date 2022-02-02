@@ -15,6 +15,15 @@ export class ClientService {
     readonly URL_API = environment.url + "client";
     constructor(private http: HttpClient) {}
 
+    getCountryName<T>(): Observable<T> {
+        const options = {
+            headers: new HttpHeaders({}),
+        };
+        return this.http
+            .get<T>(`${this.URL_API}/getCountryName`, options)
+            .pipe(retry(3), catchError(this.handleError));
+    }
+
     getClient<T>(): Observable<T> {
         const options = {
             headers: new HttpHeaders({}),
