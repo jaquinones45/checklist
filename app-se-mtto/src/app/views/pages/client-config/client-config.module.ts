@@ -8,9 +8,7 @@ import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
 
 import { ClientConfigComponent } from './client-config.component';
 
-import { ModulePlantComponent } from '../../../elements/module-plant/module-plant.component'
-import { ModuleComponentComponent } from '../../../elements/module-component/module-component.component'
-import { ModuleEquipmentComponent } from '../../../elements/module-equipment/module-equipment.component'
+import { ElementsModule } from '../../../elements/elements.module'
 
 const routes: Routes = [
   {
@@ -21,9 +19,6 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     ClientConfigComponent,
-    ModulePlantComponent,
-    ModuleComponentComponent,
-    ModuleEquipmentComponent,
   ],
   imports: [
     CommonModule,
@@ -31,6 +26,7 @@ const routes: Routes = [
     FormsModule,
     NgbModule,
     DropDownListModule,
+    ElementsModule,
   ]
 })
 export class ClientConfigModule { }
