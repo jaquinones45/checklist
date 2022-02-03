@@ -42,8 +42,8 @@ export class TablaFormComponent implements OnInit {
     this.salidaData.emit($event)
   }
 
-  redirectPreview(id) {
-    this.redirectTo(`form-preview/${id}`)
+  redirectConfig(id) {
+    this.redirectTo(`form/${id}/config`)
   }
 
   redirectTo(uri: string) {

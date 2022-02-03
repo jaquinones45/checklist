@@ -13,9 +13,13 @@ class componentModel {
           SELECT
             [component].id, 
             [component].name,
-            [component].client_id
+            [component].client_id,
+            [type_component].id AS type_component_id,
+            [type_component].name AS type_component_name
           FROM [component]
+          INNER JOIN [type_component] ON [type_component].id = [component].type_component_id
           WHERE [component].client_id = ${client_id}
+            AND [type_component].deleted = 0
             AND ${name 
               ? `[component].name LIKE '%${name}%'`
               : '[component].name IS NOT NULL'
@@ -27,6 +31,28 @@ class componentModel {
         resolve(result.recordset);
       } catch (error) {
         console.error("An error ocurred getComponentDB: ", error);
+        reject(error);
+      }
+    });
+  }
+
+  static async getTypeComponentNameDB(): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const conn = await db.connect();
+        const query = `
+          SELECT
+            [type_component].id,
+            [type_component].name
+          FROM [type_component]
+          WHERE [type_component].deleted = 0
+          ORDER BY [type_component].id DESC
+        `
+        const result = await conn.query(query);
+        // retornar los datos
+        resolve(result.recordset);
+      } catch (error) {
+        console.error("An error ocurred getTypeComponentNameDB: ", error);
         reject(error);
       }
     });

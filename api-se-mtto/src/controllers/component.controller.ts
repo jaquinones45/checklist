@@ -21,6 +21,18 @@ class componentController {
     })
   }
 
+  static async getTypeComponentName(): Promise<object> {
+    return new Promise( async (resolve, reject) => {
+      try {
+        const res = await componentModel.getTypeComponentNameDB()
+        resolve(res);
+      } catch (error) {
+        console.error("An error ocurred getTypeComponentName: ",error);
+        reject(error);
+      }
+    })
+  }
+
   static async saveComponent(
     name:any | undefined, 
     client_id:any | undefined,

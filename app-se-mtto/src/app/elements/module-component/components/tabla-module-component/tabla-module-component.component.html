@@ -5,12 +5,14 @@
         <tr class="font-overpass">
           <th class="text-left" style="width:5%">#</th>
           <th class="text-left" style="width:25%">Nombre</th>
+          <th class="text-left" style="width:25%">Tipo</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let element of datos" style="cursor: pointer">
           <td class="text-left">{{ element.id }}</td>
           <td class="text-left">{{ element.name }}</td>
+          <td class="text-left">{{ element.type_component_name }}</td>
         </tr>
       </tbody>
     </table>
@@ -22,6 +24,7 @@
       <tr class="font-overpass">
         <th class="text-left" style="width:5%">#</th>
         <th class="text-left" style="width:25%">Nombre</th>
+        <th class="text-left" style="width:25%">Tipo</th>
         <th class="text-center" style="width:10%">Acciones</th>
       </tr>
     </thead>
@@ -35,14 +38,15 @@
       >
         <td class="text-left">{{ element.id }}</td>
         <td class="text-left">{{ element.name }}</td>
+        <td class="text-left">{{ element.type_component_name }}</td>
         <td class="text-center pt-1">
-          <app-form-module-equipment
+          <app-form-module-component
             class="pr-2"
-            [nombre]="'Edición del component'"
+            [nombre]="'Edición del componente'"
             [data]="element"
             [update]="true"
             (refresh)="setRefresh($event)"
-          ></app-form-module-equipment>
+          ></app-form-module-component>
         </td>
       </tr>
     </tbody>

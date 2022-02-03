@@ -29,9 +29,9 @@ const getClient = async (req: Request, res: Response): Promise<Response | void> 
 
 const saveClient = async (req: Request, res: Response): Promise<Response | void> => {
   try {
-    const { name } = req.body
+    const { name, country_id } = req.body
     const result = await clientController.saveClient(
-      name
+      name, country_id
     );
     res.status(OK).json(result)
   } catch (error) {
@@ -43,9 +43,9 @@ const saveClient = async (req: Request, res: Response): Promise<Response | void>
 const updateClient = async (req: Request, res: Response): Promise<Response | void> => {
   try {
     const { id } = req.params
-    const { name } = req.body
+    const { name, country_id } = req.body
     const result = await clientController.updateClient(
-      id, name
+      id, name, country_id
     );
     res.status(OK).json(result)
   } catch (error) {

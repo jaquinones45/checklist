@@ -34,11 +34,12 @@ class clientController {
 
   static async saveClient(
     name: any | undefined,
+    country_id: any | undefined,
   ): Promise<object> {
     return new Promise( async (resolve, reject) => {
       try {
         const res = await clientModel.saveClientDB(
-          name
+          name, country_id
         )
         resolve(res);
       } catch (error) {
@@ -50,12 +51,13 @@ class clientController {
 
   static async updateClient(
     id: any | undefined,
-    name: any | undefined
+    name: any | undefined,
+    country_id: any | undefined,
   ): Promise<object> {
     return new Promise( async (resolve, reject) => {
       try {
         const res = await clientModel.updateClientDB(
-          id, name
+          id, name, country_id
         )
         resolve(res);
       } catch (error) {

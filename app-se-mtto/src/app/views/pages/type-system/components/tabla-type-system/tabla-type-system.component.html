@@ -48,16 +48,9 @@
       <td class="text-left">{{ element.last_date | date: 'yyyy-MM-dd HH:mm' }}</td>
       <td class="text-center">{{ element.quantity_revision }}</td>
         <td class="text-center pt-1">
-          <app-form-type-system
-            class="pr-2"
-            [nombre]="'Edición del tipo de sistema'"
-            [data]="element"
-            [update]="true"
-            (refresh)="setRefresh($event)"
-          ></app-form-type-system>
           <i 
             (click)="redirectRevision(element.id)"
-            class="feather icon-log-out pl-1"
+            class="feather icon-clipboard pl-1"
             style="cursor: pointer;font-size: 20px;color: #C4C4C4;"
           ></i>
         </td>

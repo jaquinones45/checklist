@@ -113,6 +113,22 @@ const routes: Routes = [
           ),
       },
       {
+        path: "form-preview",
+        runGuardsAndResolvers: "always",
+        loadChildren: () =>
+          import("./views/pages/form-preview/form-preview.module").then(
+            (m) => m.FormPreviewModule
+          ),
+      },
+      {
+        path: "form-preview/:id",
+        runGuardsAndResolvers: "always",
+        loadChildren: () =>
+          import("./views/pages/form-preview/form-preview.module").then(
+            (m) => m.FormPreviewModule
+          ),
+      },
+      {
         path: "client",
         runGuardsAndResolvers: "always",
         loadChildren: () =>

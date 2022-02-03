@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import * as XLSX from 'xlsx';
 
 import { FormService } from 'src/app/core/services/form.service'
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-form',
@@ -18,8 +19,13 @@ export class FormComponent implements OnInit {
   loaded : boolean = false
   loadOneForm : boolean = false
 
+  showQuestion: boolean = false
+
+  question: any = {}
+
   constructor(
-    private formService: FormService
+    private formService: FormService,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -31,7 +37,6 @@ export class FormComponent implements OnInit {
       .toPromise()
       .then((response:any) => {
         this.dataForm = response.data
-        if (response.data.length > 0) this.getOneForm(response.data[0].id)
         this.loaded = true
       });
   }
@@ -41,7 +46,7 @@ export class FormComponent implements OnInit {
       .toPromise()
       .then((response:any) => {
         this.dataOneForm = response.data
-        this.loadOneForm = true
+        this.showQuestion = true
       });
   }
 
@@ -64,6 +69,18 @@ export class FormComponent implements OnInit {
   }
 
   setSalidaData($event) {
-    this.getOneForm($event)
+    this.question = $event
+    this.showQuestion = false
+    this.getOneForm($event.id)
+  }
+
+  redirectPreview() {
+    this.redirectTo(`form-preview`)
+  }
+
+  redirectTo(uri: string) {
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(
+      () => this.router.navigate([uri])
+    );
   }
 }

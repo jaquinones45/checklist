@@ -28,6 +28,41 @@ export class TypeSystemService {
             .pipe(retry(3), catchError(this.handleError));
     }
 
+    getComponentName<T>(param): Observable<T> {
+        let httpParams = new HttpParams();
+        if (param.client_id && param.client_id != undefined) httpParams = httpParams.append('client_id', param.client_id)
+
+        const options = {
+            params: httpParams,
+            headers: new HttpHeaders({}),
+        };
+        return this.http
+            .get<T>(`${this.URL_API}/getComponentName`, options)
+            .pipe(retry(3), catchError(this.handleError));
+    }
+
+    getFormName<T>(param): Observable<T> {
+        let httpParams = new HttpParams();
+        if (param.type_component_id && param.type_component_id != undefined) httpParams = httpParams.append('type_component_id', param.type_component_id)
+
+        const options = {
+            params: httpParams,
+            headers: new HttpHeaders({}),
+        };
+        return this.http
+            .get<T>(`${this.URL_API}/getFormName`, options)
+            .pipe(retry(3), catchError(this.handleError));
+    }
+
+    getTypeQuestionName<T>(): Observable<T> {
+        const options = {
+            headers: new HttpHeaders({}),
+        };
+        return this.http
+            .get<T>(`${this.URL_API}/getTypeQuestionName`, options)
+            .pipe(retry(3), catchError(this.handleError));
+    }
+
     getTypeSystemName<T>(param): Observable<T> {
         let httpParams = new HttpParams();
         if (param.client_id && param.client_id != undefined) httpParams = httpParams.append('client_id', param.client_id)

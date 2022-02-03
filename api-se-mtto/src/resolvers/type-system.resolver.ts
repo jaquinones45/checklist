@@ -29,6 +29,43 @@ const getTypeSystemName = async (req: Request, res: Response): Promise<Response 
   }
 }
 
+const getComponentName = async (req: Request, res: Response): Promise<Response | void> => {
+  try {
+    const { client_id } = req.query;
+    const result:any = await typeSystemController.getComponentName(
+      client_id
+    );
+    res.status(OK).json({data: result, success: true})
+  } catch (error) {
+    console.error("An error ocurred getComponentName: ",error);
+    res.status(EXPECTATION_FAILED).json({ message: "Error, ocurrio un problema en la solicitud", success: false });
+  }
+}
+
+const getFormName = async (req: Request, res: Response): Promise<Response | void> => {
+  try {
+    const { type_component_id } = req.query;
+    const result:any = await typeSystemController.getFormName(
+      type_component_id
+    );
+    res.status(OK).json({data: result, success: true})
+  } catch (error) {
+    console.error("An error ocurred getFormName: ",error);
+    res.status(EXPECTATION_FAILED).json({ message: "Error, ocurrio un problema en la solicitud", success: false });
+  }
+}
+
+const getTypeQuestionName = async (req: Request, res: Response): Promise<Response | void> => {
+  try {
+    const { client_id } = req.query;
+    const result:any = await typeSystemController.getTypeQuestionName();
+    res.status(OK).json({data: result, success: true})
+  } catch (error) {
+    console.error("An error ocurred getTypeQuestionName: ",error);
+    res.status(EXPECTATION_FAILED).json({ message: "Error, ocurrio un problema en la solicitud", success: false });
+  }
+}
+
 const getTypeSystem = async (req: Request, res: Response): Promise<Response | void> => {
   try {
     const { name, plant_id, date, client_id } = req.query;
@@ -83,9 +120,9 @@ const saveTypeSystem = async (req: Request, res: Response): Promise<Response | v
 
 const saveTypeSystemRevision = async (req: Request, res: Response): Promise<Response | void> => {
   try {
-    const { responsable, date, hours, status, type_system_id, component_id, form_id, questions } = req.body;
+    const { responsable, date, hours, status, type_system_id, type_component_id, form_id, questions } = req.body;
     const result = await typeSystemController.saveTypeSystemRevision(
-      responsable, date, hours, status, type_system_id, component_id, form_id, questions
+      responsable, date, hours, status, type_system_id, type_component_id, form_id, questions
     );
     res.status(OK).json(result)
   } catch (error) {
@@ -111,9 +148,9 @@ const updateTypeSystem = async (req: Request, res: Response): Promise<Response |
 const updateTypeSystemRevision = async (req: Request, res: Response): Promise<Response | void> => {
   try {
     const { id } = req.params
-    const { responsable, date, hours, status, type_system_id, component_id, form_id, questions } = req.body;
+    const { responsable, date, hours, status, type_system_id, type_component_id, form_id, questions } = req.body;
     const result:any = await typeSystemController.updateTypeSystemRevision(
-      id, responsable, date, hours, status, type_system_id, component_id, form_id, questions
+      id, responsable, date, hours, status, type_system_id, type_component_id, form_id, questions
     );
     res.status(OK).json(result)
   } catch (error) {
@@ -125,6 +162,9 @@ const updateTypeSystemRevision = async (req: Request, res: Response): Promise<Re
 export default {
   getPlantName,
   getTypeSystemName,
+  getComponentName,
+  getFormName,
+  getTypeQuestionName,
   getTypeSystem,
   getTypeSystemRevision,
   getOneTypeSystemRevision,

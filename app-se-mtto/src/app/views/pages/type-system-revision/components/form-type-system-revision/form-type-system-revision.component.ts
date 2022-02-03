@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 
 import { NgbModalConfig, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
-import { FormService } from 'src/app/core/services/form.service'
+import { TypeSystemService } from 'src/app/core/services/type-system.service'
 
 @Component({
   selector: 'app-form-type-system-revision',
@@ -31,7 +31,7 @@ export class FormTypeSystemRevisionComponent {
 
   constructor(
     private modalService: NgbModal, 
-    private formService: FormService,
+    private typeSystemService: TypeSystemService,
     private config: NgbModalConfig
     ) {
       this.config.backdrop = 'static';
@@ -87,8 +87,8 @@ export class FormTypeSystemRevisionComponent {
       this.error = ''
       this.data.load = true
       if (!this.update) {
-        this.formService
-          .saveFormRevision(this.data)
+        this.typeSystemService
+          .saveTypeSystemRevision(this.data)
           .subscribe((response:any) => {
             if (response.success) {
               this.data = {id: null, name: '', plant_id: null, client_id: localStorage.getItem('client_id'), load: false}
@@ -107,8 +107,8 @@ export class FormTypeSystemRevisionComponent {
             console.log(error);
           })
       } else {
-        this.formService
-          .saveFormRevision(this.data)
+        this.typeSystemService
+          .updateTypeSystemRevision(this.data)
           .subscribe((response:any) => {
             if (response.success) {
               this.data = {id: null, name: '', plant_id: null, client_id: localStorage.getItem('client_id'), load: false}

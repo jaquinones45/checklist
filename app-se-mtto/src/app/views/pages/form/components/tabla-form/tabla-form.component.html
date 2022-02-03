@@ -45,20 +45,14 @@
             mat-button href="javascript:void(0)" 
             data-toggle="tooltip" 
             data-placement="top" 
-            title="Agregar preguntas"
+            title="Editar lista de revisión"
           >
             <i 
-              (click)="setSalidaData(element.id)"
-              class="feather icon-settings pr-1"
+              (click)="redirectPreview(element.id)"
+              class="feather icon-edit pr-1"
               style="cursor: pointer;font-size: 20px;color: #C4C4C4;"
             ></i>
           </a>
-          <app-form-form
-            [nombre]="'Edición de la lista de revisión'"
-            [data]="element"
-            [update]="true"
-            (refresh)="setRefresh($event)"
-          ></app-form-form>
         </td>
       </tr>
     </tbody>

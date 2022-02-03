@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NgbModalConfig, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 import { FormService } from 'src/app/core/services/form.service'
+import { TypeSystemService } from 'src/app/core/services/type-system.service'
 
 @Component({
   selector: 'app-form-revision-form',
@@ -38,6 +39,7 @@ export class FormRevisionFormComponent {
   constructor(
     private modalService: NgbModal, 
     private formService: FormService,
+    private typeSystemService: TypeSystemService,
     private config: NgbModalConfig,
     private route: ActivatedRoute, 
     ) {
@@ -109,10 +111,10 @@ export class FormRevisionFormComponent {
   }
 
   getFormName(country) {
-    this.formService
+    this.typeSystemService
       .getFormName({country})
       .subscribe((res:any) => {
-          this.responseForm = res.data;
+        this.responseForm = res.data;
       });
   }
 
@@ -147,8 +149,8 @@ export class FormRevisionFormComponent {
       this.data.load = true
       if (this.data.component_id && this.data.form_id) {
         if (!this.update) {
-          this.formService
-            .saveFormRevision(this.data)
+          this.typeSystemService
+            .saveTypeSystemRevision(this.data)
             .subscribe((response:any) => {
               if (response.success) {
                 this.setUpdateData(response.id)
@@ -171,8 +173,8 @@ export class FormRevisionFormComponent {
               console.log(error);
             })
         } else {
-          this.formService
-            .saveFormRevision(this.data)
+          this.typeSystemService
+            .updateTypeSystemRevision(this.data)
             .subscribe((response:any) => {
               if (response.success) {
                 this.setUpdateData(response.id)

@@ -145,9 +145,9 @@
                   <ejs-dropdownlist 
                     id='ddlelement1' 
                     class="col-12 p-0" 
-                    [dataSource]='responseComponent'
+                    [dataSource]='responseTypeComponent'
                     [fields]="{ text: 'name', value: 'id' }"
-                    [(value)]='form.component_id'
+                    [(value)]='form.type_component_id'
                     (select)="selectComponent($event)"
                   ></ejs-dropdownlist>
                 </div>

@@ -9,9 +9,6 @@
     <form #myForm="ngForm" (ngSubmit)="clickSaveOrUpdate(myForm)" novalidate>
       <div class="modal-body mt-0">
 
-        <pre>{{ data.name }}</pre>
-        <pre>{{ data.question }}</pre>
-
         <div class="form-group">
           <label class="control-label">Nombre *</label>
           <input 
@@ -24,14 +21,24 @@
           >
         </div>
         <div class="form-group">
-          <label class="control-label">Descripción *</label>
-          <textarea 
-            name="name" 
-            class="form-control form-control-sm" 
-            [(ngModel)]="data.question"
-            placeholder="Descripción"
-            required="true" 
-          ></textarea>
+          <label class="control-label">Componente *</label>
+          <ejs-dropdownlist 
+            id='ddlelement1' 
+            class="col-12 p-0" 
+            [dataSource]='responseTypeComponent'
+            [fields]="{ text: 'name', value: 'id' }"
+            [(value)]='data.type_component_id'
+          ></ejs-dropdownlist>
+        </div>
+        <div class="form-group">
+          <label class="control-label">País *</label>
+          <ejs-dropdownlist 
+            id='ddlelement1' 
+            class="col-12 p-0" 
+            [dataSource]='responseCountry'
+            [fields]="{ text: 'name', value: 'id' }"
+            [(value)]='data.country_id'
+          ></ejs-dropdownlist>
         </div>
 
         <div>

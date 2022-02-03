@@ -5,20 +5,16 @@
         <tr class="font-overpass">
           <th class="text-left" style="width:5%">#</th>
           <th class="text-left" style="width:25%">Nombre</th>
+          <th class="text-left" style="width:25%">Componente</th>
           <th class="text-left" style="width:25%">País</th>
-          <th class="text-center" style="width:25%">Cantidad Plantas</th>
-          <th class="text-center" style="width:25%">Cantidad Componentes</th>
-          <th class="text-center" style="width:25%">Cantidad Equipos</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let element of datos" style="cursor: pointer">
           <td class="text-left">{{ element.id }}</td>
           <td class="text-left">{{ element.name }}</td>
+          <td class="text-left">{{ element.type_component_name }}</td>
           <td class="text-left">{{ element.country_name }}</td>
-          <td class="text-center">{{ element.count_plant }}</td>
-          <td class="text-center">{{ element.count_component }}</td>
-          <td class="text-center">{{ element.count_equipment }}</td>
         </tr>
       </tbody>
     </table>
@@ -29,11 +25,9 @@
     <thead>
       <tr class="font-overpass">
         <th class="text-left" style="width:5%">#</th>
-        <th class="text-left" style="width:20%">Nombre</th>
-        <th class="text-left" style="width:15%">País</th>
-        <th class="text-center" style="width:25%">Plantas</th>
-        <th class="text-center" style="width:25%">Componentes</th>
-        <th class="text-center" style="width:25%">Equipos</th>
+        <th class="text-left" style="width:25%">Nombre</th>
+        <th class="text-left" style="width:25%">Componente</th>
+        <th class="text-left" style="width:25%">País</th>
         <th class="text-center" style="width:10%">Acciones</th>
       </tr>
     </thead>
@@ -44,29 +38,27 @@
       >
         <td class="text-left">{{ element.id }}</td>
         <td class="text-left">{{ element.name }}</td>
+        <td class="text-left">{{ element.type_component_name }}</td>
         <td class="text-left">{{ element.country_name }}</td>
-        <td class="text-center">{{ element.count_plant }}</td>
-        <td class="text-center">{{ element.count_component }}</td>
-        <td class="text-center">{{ element.count_equipment }}</td>
         <td class="text-center pt-1">
           <a 
             mat-button href="javascript:void(0)" 
             data-toggle="tooltip" 
             data-placement="top" 
-            title="Configurar el cliente"
+            title="Agregar preguntas"
           >
             <i 
-              (click)="redirectConfig(element.id)"
+              (click)="setSalidaData(element)"
               class="feather icon-settings pr-1"
               style="cursor: pointer;font-size: 20px;color: #C4C4C4;"
             ></i>
           </a>
-          <app-form-client
-            [nombre]="'Edición del cliente'"
+          <app-form-form
+            [nombre]="'Edición de la lista de revisión'"
             [data]="element"
             [update]="true"
             (refresh)="setRefresh($event)"
-          ></app-form-client>
+          ></app-form-form>
         </td>
       </tr>
     </tbody>

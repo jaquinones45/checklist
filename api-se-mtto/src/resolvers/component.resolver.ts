@@ -3,7 +3,6 @@ import { StatusCodes } from "http-status-codes";
 import componentController from "../controllers/component.controller";
 const { OK, EXPECTATION_FAILED } = StatusCodes;
 
-
 const getComponent = async (req: Request, res: Response): Promise<Response | void> => {
   try {
     const { name, client_id } = req.query;
@@ -13,6 +12,16 @@ const getComponent = async (req: Request, res: Response): Promise<Response | voi
     res.status(OK).json({data: result, success: true})
   } catch (error) {
     console.error("An error ocurred getComponent: ",error);
+    res.status(EXPECTATION_FAILED).json({ message: "Error, ocurrio un problema en la solicitud", success: false });
+  }
+}
+
+const getTypeComponentName = async (req: Request, res: Response): Promise<Response | void> => {
+  try {
+    const result:any = await componentController.getTypeComponentName();
+    res.status(OK).json({data: result, success: true})
+  } catch (error) {
+    console.error("An error ocurred getTypeComponentName: ",error);
     res.status(EXPECTATION_FAILED).json({ message: "Error, ocurrio un problema en la solicitud", success: false });
   }
 }
@@ -46,6 +55,7 @@ const updateComponent = async (req: Request, res: Response): Promise<Response | 
 
 export default {
   getComponent,
+  getTypeComponentName,
   saveComponent,
   updateComponent,
 }

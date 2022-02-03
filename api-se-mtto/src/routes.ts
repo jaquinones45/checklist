@@ -13,6 +13,7 @@ import country from "./resolvers/country.resolver"
 import typeComponent from "./resolvers/type-component.resolver"
 import client from "./resolvers/client.resolver"
 import form from "./resolvers/form.resolver"
+import fileUpload from "./resolvers/file-upload.resolver"
 
 const router = Router();
 
@@ -90,8 +91,9 @@ router.route("/api/user/:id").delete(users.deleteUser);
  * Api User Select All
  */
 router.route("/api/user/select-all").get(users.getSelectAll);
+
 /**
-  * Api Plant
+  * Api Tipo de Sistema
   * @param {string} plant_id el id de la planta a filtrar.
   * @query {string} type_system_id el id del tipo de sistema a filtrar.
   * @query {string} date el id del usuario a filtrar.
@@ -100,13 +102,40 @@ router.route("/api/user/select-all").get(users.getSelectAll);
 router.route("/api/type-system/getPlantName").get(typeSystem.getPlantName);
 
 /**
-  * Api Plant
+  * Api Tipo de Sistema
   * @param {string} plant_id el id de la planta a filtrar.
   * @query {string} type_system_id el id del tipo de sistema a filtrar.
   * @query {string} date el id del usuario a filtrar.
   * @query {string} client_id el id del cliente a filtrar.
 */
 router.route("/api/type-system/getTypeSystemName").get(typeSystem.getTypeSystemName);
+
+/**
+  * Api Tipo de Sistema
+  * @param {string} plant_id el id de la planta a filtrar.
+  * @query {string} type_system_id el id del tipo de sistema a filtrar.
+  * @query {string} date el id del usuario a filtrar.
+  * @query {string} client_id el id del cliente a filtrar.
+*/
+router.route("/api/type-system/getComponentName").get(typeSystem.getComponentName);
+
+/**
+  * Api Tipo de Sistema
+  * @param {string} plant_id el id de la planta a filtrar.
+  * @query {string} type_system_id el id del tipo de sistema a filtrar.
+  * @query {string} date el id del usuario a filtrar.
+  * @query {string} client_id el id del cliente a filtrar.
+*/
+router.route("/api/type-system/getFormName").get(typeSystem.getFormName);
+
+/**
+  * Api Tipo de Sistema
+  * @param {string} plant_id el id de la planta a filtrar.
+  * @query {string} type_system_id el id del tipo de sistema a filtrar.
+  * @query {string} date el id del usuario a filtrar.
+  * @query {string} client_id el id del cliente a filtrar.
+*/
+router.route("/api/type-system/getTypeQuestionName").get(typeSystem.getTypeQuestionName);
 
 /**
   * Api Tipo Sistema
@@ -269,6 +298,13 @@ router.route("/api/equipment/:id").put(equipment.updateEquipment);
   * @query {string} name  el nombre del equipo a filtrar.
   * @query {int} client_id el id del equipo a filtrar.
 */
+router.route("/api/component/getTypeComponentName").get(component.getTypeComponentName);
+
+/**
+  * Api Componente
+  * @query {string} name  el nombre del equipo a filtrar.
+  * @query {int} client_id el id del equipo a filtrar.
+*/
 router.route("/api/component").get(component.getComponent);
 
 /**
@@ -396,11 +432,35 @@ router.route("/api/form").get(form.getForm);
 router.route("/api/form").post(form.saveForm);
 
 /**
+ * Api Formulario
+ * @query {string} name el nombre del formulario a filtrar.
+ * @query {string} country el pais del formulario a filtrar.
+ * @query {int} component_id el id del formulario a filtrar.
+ */
+router.route("/api/form/question").post(form.saveFormQuestion);
+
+/**
   * Api Equipo
   * @param {int} id el id del equipo a filtrar.
   * @body {string} name el nombre del equipo a filtrar.
   * @body {int} client_id el id del equipo a filtrar.
 */
 router.route("/api/form/:id").put(form.updateForm);
+
+/**
+  * Api Equipo
+  * @param {int} id el id del equipo a filtrar.
+  * @body {string} name el nombre del equipo a filtrar.
+  * @body {int} client_id el id del equipo a filtrar.
+*/
+router.route("/api/form/question/:id").put(form.updateFormQuestion);
+
+/**
+ * Api Formulario
+ * @query {string} name el nombre del formulario a filtrar.
+ * @query {string} country el pais del formulario a filtrar.
+ * @query {int} component_id el id del formulario a filtrar.
+ */
+ router.route("/api/file-upload").post(fileUpload.saveFileUpload);
 
 export default router;

@@ -20,6 +20,16 @@
             required="true" 
           >
         </div> 
+        <div class="form-group">
+          <label class="control-label">Tipo *</label>
+          <ejs-dropdownlist 
+            id='ddlelement1' 
+            class="col-12 p-0" 
+            [dataSource]='responseTypeComponent'
+            [fields]="{ text: 'name', value: 'id' }"
+            [(value)]='data.type_component_id'
+          ></ejs-dropdownlist>
+        </div>
 
         <div>
           <ngb-alert [type]="'success'" *ngIf="message != ''"><div [innerHtml]="message"></div></ngb-alert>

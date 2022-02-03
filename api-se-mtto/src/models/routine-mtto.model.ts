@@ -65,10 +65,10 @@ class routineMttoModel {
         const conn = await db.connect();
         const query = `
           SELECT
-            [question_revision].id, 
+            [revision].id, 
             [type_system].name, 
-            [type_system].quantity_revision, 
-            [type_system].last_date, 
+            [system].quantity_revision, 
+            [system].last_date, 
             [plant].id AS plant_id,
             [plant].name AS planta_name,
             [plant].client_id,
@@ -76,43 +76,36 @@ class routineMttoModel {
             [revision].date,
             [revision].hours,
             [revision].status,
-            [revision].component_id,
-            [component].name AS component_name,
+            [revision].type_component_id,
+            [type_component].name AS type_component_name,
             [revision].form_id,
-            [form].name AS form_name,
-            [question_revision].notes,
-            [question_revision].question_id,
-            [question].question,
-            [question_revision].type_question_id,
-            [type_question].alias AS type_question_name
-          FROM [plant]
-          INNER JOIN [type_system] ON [type_system].plant_id = [plant].id
-          INNER JOIN [revision] ON [revision].type_system_id = [type_system].id
-          INNER JOIN [component] ON [component].id = [revision].component_id
+            [form].name AS form_name
+          FROM [revision]
+          INNER JOIN [system] ON [system].id = [revision].system_id
+          INNER JOIN [type_system] ON [type_system].id = [system].type_system_id
+          INNER JOIN [plant] ON [plant].id = [system].plant_id
+          INNER JOIN [type_component] ON [type_component].id = [revision].type_component_id
           INNER JOIN [form] ON [form].id = [revision].form_id
-          INNER JOIN [question_revision] ON [question_revision].revision_id = [revision].id
-          INNER JOIN [question] ON [question].id = [question_revision].question_id
-          INNER JOIN [type_question] ON [type_question].id = [question_revision].type_question_id
           WHERE [plant].client_id = ${client_id}
             AND ${name 
-              ? `[type_system].name LIKE '%${plant_id}%'`
+              ? `[type_system].name LIKE '%${name}%'`
               : '[type_system].name IS NOT NULL'
             }
             AND ${plant_id 
-              ? `[type_system].plant_id = ${plant_id}`
-              : '[type_system].plant_id IS NOT NULL'
+              ? `[system].plant_id = ${plant_id}`
+              : '[system].plant_id IS NOT NULL'
             }
             ${date 
-              ? `AND [type_system].last_date = '${this.convertDateTime(new Date(date))}'`
+              ? `AND [system].last_date = '${this.convertDateTime(new Date(date))}'`
               : ''
             }
-          ORDER BY [type_system].last_date DESC
+          ORDER BY [system].last_date DESC
         `
         const result = await conn.query(query);
         // retornar los datos
         resolve(result.recordset);
       } catch (error) {
-        console.error("An error ocurred getPlantDB: ", error);
+        console.error("An error ocurred getRoutineMttoDB: ", error);
         reject(error);
       }
     });
@@ -132,16 +125,16 @@ class routineMttoModel {
             [revision].hours, 
             [revision].status,
             [revision].type_system_id,
-            [revision].component_id,
-            [component].name AS component_name,
+            [revision].type_component_id,
+            [type_component].name AS type_component_name,
             [revision].form_id,
             [form].name AS form_name
           FROM [revision]
-          INNER JOIN [component] ON [component].id = [revision].component_id
+          INNER JOIN [type_component] ON [type_component].id = [revision].type_component_id
           INNER JOIN [form] ON [form].id = [revision].form_id
           WHERE [revision].type_system_id = ${type_system_id}
             AND [revision].deleted = 0
-            AND [component].deleted = 0
+            AND [type_component].deleted = 0
             AND [form].deleted = 0
           ORDER BY [revision].id DESC
         `

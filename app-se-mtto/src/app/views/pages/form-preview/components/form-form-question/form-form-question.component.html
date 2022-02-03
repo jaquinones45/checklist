@@ -9,9 +9,6 @@
     <form #myForm="ngForm" (ngSubmit)="clickSaveOrUpdate(myForm)" novalidate>
       <div class="modal-body mt-0">
 
-        <pre>{{ data.name }}</pre>
-        <pre>{{ data.question }}</pre>
-
         <div class="form-group">
           <label class="control-label">Nombre *</label>
           <input 
@@ -26,17 +23,12 @@
         <div class="form-group">
           <label class="control-label">Descripción *</label>
           <textarea 
-            name="name" 
+            name="question" 
             class="form-control form-control-sm" 
             [(ngModel)]="data.question"
             placeholder="Descripción"
             required="true" 
           ></textarea>
-        </div>
-
-        <div>
-          <ngb-alert [type]="'success'" *ngIf="message != ''"><div [innerHtml]="message"></div></ngb-alert>
-          <ngb-alert [type]="'warning'" *ngIf="error != ''"><div [innerHtml]="error"></div></ngb-alert>
         </div>
 
       </div>
@@ -54,7 +46,7 @@
   mat-button href="javascript:void(0)" 
   data-toggle="tooltip" 
   data-placement="top" 
-  title="Crear Lista de revisión"
+  title="Crear Pregunta"
   *ngIf=!update
 >
   <i 
@@ -67,7 +59,7 @@
   mat-button href="javascript:void(0)" 
   data-toggle="tooltip" 
   data-placement="top" 
-  title="Editar Lista de revisión"
+  title="Editar Pregunta"
   *ngIf=update
 >
   <i 

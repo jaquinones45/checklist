@@ -1,0 +1,104 @@
+<div class="row">
+  <div class="col-12 col-md-6 grid-margin stretch-card">
+    <div class="card overflow-hidden">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-10">
+            <div class="titulo">{{ form_id ? 'EDICIÓN' : 'CREACIÓN' }} DE LISTA DE REVISIÓN</div>
+            <div class="subtitulo mb-2">{{ form_id ? 'Edición' : 'Creacion' }} del istado de las revisiones del sistema.</div>
+          </div>
+          <div class="col-2">
+            <div class="d-flex justify-content-end">
+              <app-form-form-question
+                class="pr-2"
+                [nombre]="'Creación de la pregunta'"
+                [form_id]="form_id"
+                (refresh)="setRefresh($event)"
+                (salidaData)="setSalidaData($event)"
+              ></app-form-form-question>
+            </div>
+          </div>
+        </div>
+
+        <form #myForm="ngForm" (ngSubmit)="clickSaveOrUpdate()" novalidate>
+          
+          <div class="row mt-4">
+            <div class="col-12 col-md-6">
+              <div class="form-group">
+                <label class="control-label">Nombre *</label>
+                <input 
+                  type="text" 
+                  name="name" 
+                  class="form-control form-control-sm" 
+                  [(ngModel)]="data.name"
+                  placeholder="Nombre"
+                  required="true" 
+                >
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="form-group">
+                <label class="control-label">Componente *</label>
+                <ejs-dropdownlist 
+                  id='ddlelement1' 
+                  class="col-12 p-0" 
+                  [dataSource]='responseTypeComponent'
+                  [fields]="{ text: 'name', value: 'id' }"
+                  [(value)]='data.type_component_id'
+                ></ejs-dropdownlist>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="form-group">
+                <label class="control-label">País *</label>
+                <ejs-dropdownlist 
+                  id='ddlelement1' 
+                  class="col-12 p-0" 
+                  [dataSource]='responseCountry'
+                  [fields]="{ text: 'name', value: 'id' }"
+                  [(value)]='data.country_id'
+                ></ejs-dropdownlist>
+              </div>
+            </div>
+          </div>
+
+          <app-tabla-form-question
+            [data]=data.questions
+            (refresh)="setRefresh($event)"
+            *ngIf="data.questions.length > 0"
+          ></app-tabla-form-question>
+          <div 
+            id="external-events" 
+            class="external-events pt-3"
+            *ngIf="data.questions.length == 0"
+          >
+            <div class="fc-event-page fc-h-event">
+              <p class="m-0" style="font-size: 14px">No se encontraron registros de las preguntas.</p>
+            </div>
+          </div>
+
+          <div>
+            <ngb-alert [type]="'success'" *ngIf="message != ''"><div [innerHtml]="message"></div></ngb-alert>
+            <ngb-alert [type]="'warning'" *ngIf="error != ''"><div [innerHtml]="error"></div></ngb-alert>
+          </div>
+
+          <div class="row pt-2 text-center">
+            <div class="col-12">
+              <button 
+                class="btn btn-outline-success btn-sm mr-1" 
+                type="submit"
+              >
+                <i class="feather icon-save"></i> Guardar
+              </button>
+            </div>
+          </div>
+
+        </form>
+
+
+
+      </div>
+    </div>
+  </div>
+
+</div>

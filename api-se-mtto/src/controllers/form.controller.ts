@@ -47,12 +47,13 @@ class formController {
   static async getForm(
     name:any | undefined, 
     country_id:any | undefined, 
-    type_component_id:any | undefined, 
+    type_component_id:any | undefined,
+
   ): Promise<object> {
     return new Promise( async (resolve, reject) => {
       try {
         const res = await formModel.getFormDB(
-          name, country_id, type_component_id
+          name, country_id, type_component_id, 
         )
         resolve(res);
       } catch (error) {
@@ -65,16 +66,35 @@ class formController {
   static async saveForm(
     name:any | undefined, 
     country_id:any | undefined, 
-    type_component_id:any | undefined, 
+    type_component_id:any | undefined,
+    questions:any | undefined,
   ): Promise<object> {
     return new Promise( async (resolve, reject) => {
       try {
         const res = await formModel.saveFormDB(
-          name, country_id, type_component_id
+          name, country_id, type_component_id, questions
         )
         resolve(res);
       } catch (error) {
         console.error("An error ocurred saveForm: ",error);
+        reject(error);
+      }
+    })
+  }
+
+  static async saveFormQuestion(
+    name:any | undefined, 
+    question:any | undefined, 
+    form_id:any | undefined, 
+  ): Promise<object> {
+    return new Promise( async (resolve, reject) => {
+      try {
+        const res = await formModel.saveFormQuestionDB(
+          name, question, form_id
+        )
+        resolve(res);
+      } catch (error) {
+        console.error("An error ocurred saveFormQuestion: ",error);
         reject(error);
       }
     })
@@ -85,15 +105,35 @@ class formController {
     name:any | undefined, 
     country_id:any | undefined, 
     type_component_id:any | undefined, 
+    questions:any | undefined, 
   ): Promise<object> {
     return new Promise( async (resolve, reject) => {
       try {
         const res = await formModel.updateFormDB(
-          id, name, country_id, type_component_id
+          id, name, country_id, type_component_id, questions
         )
         resolve(res);
       } catch (error) {
         console.error("An error ocurred updateForm: ",error);
+        reject(error);
+      }
+    })
+  }
+
+  static async updateFormQuestion(
+    id:any | undefined, 
+    name:any | undefined, 
+    question:any | undefined, 
+    form_id:any | undefined, 
+  ): Promise<object> {
+    return new Promise( async (resolve, reject) => {
+      try {
+        const res = await formModel.updateFormQuestionDB(
+          id, name, question, form_id
+        )
+        resolve(res);
+      } catch (error) {
+        console.error("An error ocurred updateFormQuestion: ",error);
         reject(error);
       }
     })

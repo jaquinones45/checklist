@@ -1,41 +1,41 @@
 import { Component, EventEmitter, Input, Output} from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 
 import { NgbModalConfig, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
-import { ComponentService } from 'src/app/core/services/component.service'
+import { FormService } from 'src/app/core/services/form.service'
 
 @Component({
-  selector: 'app-form-module-component',
-  templateUrl: './form-module-component.component.html',
-  styleUrls: ['./form-module-component.component.scss']
+  selector: 'app-form-form',
+  templateUrl: './form-form.component.html',
+  styleUrls: ['./form-form.component.scss']
 })
-export class FormModuleComponentComponent {
+export class FormFormComponent {
   closeResult = ''
   load: boolean = false
   modal: boolean = false
   plants: any = []
   @Input() id
   @Input() nombre
-  @Input() data = {id: null, name: '', type_component_id: null, client_id: localStorage.getItem('client_id') > '0' ? localStorage.getItem('client_id') : this.route.snapshot.paramMap.get('id'), load: false}
+  @Input() data = {id: null, name: '', type_component_id: null, country_id: null, load: false}
   @Input() update: boolean = false
   @Output() refresh = new EventEmitter<any>();
   
   loadRefreshPage = false
 
   public localFields: Object = { text: 'name' }
-  loadPlant: boolean;
-  responsePlant: any;
+  loadTypeComponent: boolean = false;
+  loadCountry: boolean = false;
+
   responseTypeComponent: any;
+  responseCountry: any;
   message: string = '';
   error: string = '';
 
   constructor(
     private modalService: NgbModal, 
-    private componentService: ComponentService,
-    private config: NgbModalConfig,
-    private route: ActivatedRoute, 
+    private formService: FormService,
+    private config: NgbModalConfig
     ) {
       this.config.backdrop = 'static';
       this.config.keyboard = false;
@@ -61,9 +61,10 @@ export class FormModuleComponentComponent {
     this.message = ''
     this.error = ''
 
-    this.getComponentName()
+    this.getTypeComponentName()
+    this.getCountryName()
 
-    if (!this.update) this.data = {id: null, name: '', type_component_id: null, client_id: localStorage.getItem('client_id'), load: false}
+    if (!this.update) this.data = {id: null, name: '', type_component_id: null, country_id: null, load: false}
 
     this.modalService.open(content,
       { centered: true, ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
@@ -84,11 +85,23 @@ export class FormModuleComponentComponent {
     }
   }
 
-  getComponentName() {
-    this.componentService
+  getTypeComponentName() {
+    this.loadTypeComponent = false
+    this.formService
       .getTypeComponentName()
       .subscribe((res:any) => {
         this.responseTypeComponent = res.data;
+        this.loadTypeComponent = true
+      });
+  }
+
+  getCountryName() {
+    this.loadCountry = false
+    this.formService
+      .getCountryName()
+      .subscribe((res:any) => {
+        this.responseCountry = res.data;
+        this.loadCountry = true
       });
   }
 
@@ -100,8 +113,8 @@ export class FormModuleComponentComponent {
       this.error = ''
       this.data.load = true
       if (!this.update) {
-        this.componentService
-          .saveComponent(this.data)
+        this.formService
+          .saveForm(this.data)
           .subscribe((response:any) => {
             this.loadRefreshPage = true;
             if (response.success) {
@@ -110,7 +123,7 @@ export class FormModuleComponentComponent {
               this.modal = false
               setTimeout( () => {
                 document.getElementById("closeModal").click()
-                this.data = {id: null, name: '', type_component_id: null, client_id: localStorage.getItem('client_id'), load: false}
+                this.data = {id: null, name: '', type_component_id: null, country_id: null, load: false}
               }, 2000 )
             } else {
               this.data.load = false
@@ -122,8 +135,8 @@ export class FormModuleComponentComponent {
             console.log(error);
           })
       } else {
-        this.componentService
-          .updateComponent(this.data)
+        this.formService
+          .updateForm(this.data)
           .subscribe((response:any) => {
             this.loadRefreshPage = true;
             if (response.success) {
@@ -132,7 +145,7 @@ export class FormModuleComponentComponent {
               this.modal = false
               setTimeout( () => {
                 document.getElementById("closeModal").click()
-                this.data = {id: null, name: '', type_component_id: null, client_id: localStorage.getItem('client_id'), load: false}
+                this.data = {id: null, name: '', type_component_id: null, country_id: null, load: false}
               }, 2000 )
             } else {
               this.data.load = false

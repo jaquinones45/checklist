@@ -33,9 +33,13 @@ class clientModel {
         const query = `
           SELECT 
             [client].id, 
-            [client].name
+            [client].name,
+            [country].id AS country_id,
+            [country].name AS country_name
           FROM [client]
-          WHERE [client].deleted = 0 
+          INNER JOIN [country] ON [country].id = [client].country_id
+          WHERE [client].deleted = 0
+            AND [country].deleted = 0 
             AND ${name 
               ? `[client].name LIKE '%${name}%'`
               : "[client].name IS NOT NULL"
@@ -53,6 +57,8 @@ class clientModel {
           data.push({
             id: item.id,
             name: item.name,
+            country_id: item.name,
+            country_name: item.country_name,
             count_plant: count_plant,
             count_component: count_component,
             count_equipment: count_equipment
@@ -69,6 +75,7 @@ class clientModel {
 
   static async saveClientDB(
     name: any | undefined,
+    country_id: any | undefined,
   ): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
@@ -88,9 +95,9 @@ class clientModel {
         else {
           const query = `
             INSERT INTO [client] 
-              (name) 
+              (name, country_id) 
             VALUES 
-              ('${name}')
+              ('${name}', ${country_id})
           `
           await conn.query(query)
            
@@ -109,6 +116,7 @@ class clientModel {
   static async updateClientDB(
     id: any | undefined,
     name: any | undefined,
+    country_id: any | undefined,
   ): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
@@ -124,15 +132,18 @@ class clientModel {
             AND deleted = 0
             AND id != ${id}
         `
+        console.log(validate)
         const result_validate = await conn.query(validate);
 
         if (result_validate.recordset.length) result.error = `El nombre <b>${name}</b> ya esta registrado`
         else {
           const query = `
             UPDATE [client] SET 
-              name='${name}'
+              name='${name}',
+              country_id=${country_id}
             WHERE id = ${id}
           `
+          console.log(query)
           await conn.query(query)
           
           result.message = `Se actualizo el usuario <b>${name}</b> exitosamente.`

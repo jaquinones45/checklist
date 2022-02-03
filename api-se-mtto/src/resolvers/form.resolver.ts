@@ -51,9 +51,9 @@ const getForm = async (req: Request, res: Response): Promise<Response | void> =>
 
 const saveForm = async (req: Request, res: Response): Promise<Response | void> => {
   try {
-    const { name, country_id, type_component_id } = req.body;
+    const { name, country_id, type_component_id, questions } = req.body;
     const result = await formController.saveForm(
-      name, country_id, type_component_id
+      name, country_id, type_component_id, questions
     );
     res.status(OK).json(result)
   } catch (error) {
@@ -62,17 +62,43 @@ const saveForm = async (req: Request, res: Response): Promise<Response | void> =
   }
 }
 
+const saveFormQuestion = async (req: Request, res: Response): Promise<Response | void> => {
+  try {
+    const { name, question, form_id } = req.body;
+    const result = await formController.saveFormQuestion(
+      name, question, form_id
+    );
+    res.status(OK).json(result)
+  } catch (error) {
+    console.error("An error ocurred saveFormQuestion: ",error);
+    res.status(EXPECTATION_FAILED).json({ message: "Error, ocurrio un problema en la solicitud", success: false });
+  }
+}
 
 const updateForm = async (req: Request, res: Response): Promise<Response | void> => {
   try {
     const { id } = req.params
-    const { name, country_id, type_component_id } = req.body;
+    const { name, country_id, type_component_id, questions } = req.body;
     const result:any = await formController.updateForm(
-      id, name, country_id, type_component_id 
+      id, name, country_id, type_component_id, questions
     );
     res.status(OK).json(result)
   } catch (error) {
     console.error("An error ocurred updateForm: ",error);
+    res.status(EXPECTATION_FAILED).json({ message: "Error, ocurrio un problema en la solicitud", success: false });
+  }
+}
+
+const updateFormQuestion = async (req: Request, res: Response): Promise<Response | void> => {
+  try {
+    const { id } = req.params
+    const { name, question, form_id } = req.body;
+    const result:any = await formController.updateFormQuestion(
+      id, name, question, form_id 
+    );
+    res.status(OK).json(result)
+  } catch (error) {
+    console.error("An error ocurred updateFormQuestion: ",error);
     res.status(EXPECTATION_FAILED).json({ message: "Error, ocurrio un problema en la solicitud", success: false });
   }
 }
@@ -83,5 +109,7 @@ export default {
   getOneForm,
   getForm,
   saveForm,
+  saveFormQuestion,
   updateForm,
+  updateFormQuestion,
 }

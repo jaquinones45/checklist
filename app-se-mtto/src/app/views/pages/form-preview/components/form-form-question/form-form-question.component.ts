@@ -3,8 +3,6 @@ import { NgForm } from '@angular/forms';
 
 import { NgbModalConfig, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
-import { FormService } from 'src/app/core/services/form.service'
-
 @Component({
   selector: 'app-form-form-question',
   templateUrl: './form-form-question.component.html',
@@ -21,17 +19,12 @@ export class FormFormQuestionComponent {
   @Input() form_id
   @Input() update: boolean = false
   @Output() refresh = new EventEmitter<any>();
+  @Output() salidaData = new EventEmitter<any>();
   
   loadRefreshPage = false
 
-  public localFields: Object = { text: 'name' }
-
-  message: string = '';
-  error: string = '';
-
   constructor(
     private modalService: NgbModal, 
-    private formService: FormService,
     private config: NgbModalConfig
     ) {
       this.config.backdrop = 'static';
@@ -54,11 +47,6 @@ export class FormFormQuestionComponent {
 
   open(content) {
     this.modal = true
-
-    this.message = ''
-    this.error = ''
-
-    console.log(this.data)
 
     if (!this.update) this.data = {id: null, name: '', question: '', form_id: null, load: false}
 
@@ -85,61 +73,22 @@ export class FormFormQuestionComponent {
     if(!form.valid) {
       return false;
     } else {
-      this.message = ''
-      this.error = ''
       this.data.load = true
       this.data.form_id = this.form_id
-      if (!this.update) {
-        this.formService
-          .saveFormQuestion(this.data)
-          .subscribe((response:any) => {
-            this.loadRefreshPage = true;
-            if (response.success) {
-              this.message = response.message
-              this.error = ''
-              this.modal = false
-              setTimeout( () => {
-                document.getElementById("closeModal").click()
-                this.data = {id: null, name: '', question: '', form_id: null, load: false}
-              }, 2000 )
-            } else {
-              this.data.load = false
-              this.message = ''
-              this.error = response.error
-            }
-          },
-          error => {
-            console.log(error);
-          })
-      } else {
-        this.formService
-          .updateFormQuestion(this.data)
-          .subscribe((response:any) => {
-            this.loadRefreshPage = true;
-            if (response.success) {
-              this.message = response.message
-              this.error = ''
-              this.modal = false
-              setTimeout( () => {
-                document.getElementById("closeModal").click()
-                this.data = {id: null, name: '', question: '', form_id: null, load: false}
-              }, 2000 )
-            } else {
-              this.data.load = false
-              this.message = ''
-              this.error = response.error
-            }
-          },
-          error => {
-            console.log(error);
-          })
-      }
+
+      this.sendSalidaData(this.data)
+
+      document.getElementById("closeModal").click()
     }
   }
 
   sendRefresh() {
     this.refresh.emit(this.loadRefreshPage)
     if (this.loadRefreshPage) this.loadRefreshPage = false;
+  }
+
+  sendSalidaData($event) {
+    this.salidaData.emit($event)
   }
 
 }

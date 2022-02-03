@@ -28,6 +28,15 @@ export class ComponentService {
             .pipe(retry(3), catchError(this.handleError));
     }
 
+    getTypeComponentName<T>(): Observable<T> {
+        const options = {
+            headers: new HttpHeaders({}),
+        };
+        return this.http
+            .get<T>(`${this.URL_API}/getTypeComponentName`, options)
+            .pipe(retry(3), catchError(this.handleError));
+    }
+
     saveComponent<T>(data): Observable<T> {
         const options = {
             headers: new HttpHeaders({}),

@@ -96,12 +96,12 @@ export class FormService {
             .pipe(retry(3), catchError(this.handleError));
     }
 
-    saveFormRevision<T>(data): Observable<T> {
+    saveFormQuestion<T>(data): Observable<T> {
         const options = {
             headers: new HttpHeaders({}),
         };
         return this.http
-            .post<T>(`${this.URL_API}/revision`, data, options)
+            .post<T>(`${this.URL_API}/question`, data, options)
             .pipe(retry(3), catchError(this.handleError));
     }
 
@@ -114,12 +114,12 @@ export class FormService {
             .pipe(retry(3), catchError(this.handleError));
     }
 
-    updateFormRevision<T>(data): Observable<T> {
+    updateFormQuestion<T>(data): Observable<T> {
         const options = {
             headers: new HttpHeaders({}),
         };
         return this.http
-            .post<T>(`${this.URL_API}/revision/` + data.id, data, options)
+            .put<T>(`${this.URL_API}/question/` + data.id, data, options)
             .pipe(retry(3), catchError(this.handleError));
     }
 

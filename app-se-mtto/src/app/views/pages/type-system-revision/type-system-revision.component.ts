@@ -23,15 +23,15 @@ export class TypeSystemComponent implements OnInit {
 
   responseTypeSystemRevision: any = [];
   responseRevisionForm: any = [];
-  responseComponent: any = [];
+  responseTypeComponent: any = [];
   responseForm: any = [];
   responseTypeQuestion: any = [];
 
-  form = {id: null, responsable: '', date: '', hours: 0, status: 'draft', questions: [], type_system_id:  this.route.snapshot.paramMap.get('id'), component_id: null, form_id: null, update: false}
+  form = {id: null, responsable: '', date: '', hours: 0, status: 'draft', questions: [], type_system_id:  this.route.snapshot.paramMap.get('id'), type_component_id: null, form_id: null, update: false}
   
   constructor(
     private route: ActivatedRoute, 
-    private routineMttoService: TypeSystemService,
+    private typeSystemService: TypeSystemService,
     private formService: FormService,
     private router: Router,
   ) { }
@@ -47,7 +47,7 @@ export class TypeSystemComponent implements OnInit {
       type_system_id: this.route.snapshot.paramMap.get('id')
     }
 
-    this.routineMttoService
+    this.typeSystemService
       .getTypeSystemRevision(params)
       .subscribe((res:any) => {
         this.responseTypeSystemRevision = res.data;
@@ -59,15 +59,15 @@ export class TypeSystemComponent implements OnInit {
     const params = {
       client_id: localStorage.getItem('client_id')
     }
-    this.formService
+    this.typeSystemService
       .getComponentName(params)
       .subscribe((res:any) => {
-          this.responseComponent = res.data;
+          this.responseTypeComponent = res.data;
       });
   }
 
   getTypeQuestionName() {
-    this.formService
+    this.typeSystemService
       .getTypeQuestionName()
       .subscribe((res:any) => {
         this.responseTypeQuestion = res.data;
@@ -80,14 +80,14 @@ export class TypeSystemComponent implements OnInit {
   }
 
   setUpdateData($event) {
-    this.routineMttoService
+    this.typeSystemService
       .getOneTypeSystemRevision($event)
       .subscribe((res:any) => {
         if (res.data.status != 'completed') {
           this.form = res.data
           this.form.update = true
 
-          this.getFormName(res.data.country)
+          this.getFormName(res.data.type_component_id)
         } else {
           Swal.fire({text: 'No se puede actualizar esta revisión ya que esta completa.'})
         }
@@ -114,17 +114,17 @@ export class TypeSystemComponent implements OnInit {
   }
 
   newRevision() {
-    this.form = {id: null, responsable: '', date: '', hours: 0, status: 'draft', questions: [], type_system_id:  this.route.snapshot.paramMap.get('id'), component_id: null, form_id: null, update: false}
+    this.form = {id: null, responsable: '', date: '', hours: 0, status: 'draft', questions: [], type_system_id:  this.route.snapshot.paramMap.get('id'), type_component_id: null, form_id: null, update: false}
   }
 
   saveOrUpdateRevision(status) {
-    if (this.form.questions.length == 0) Swal.fire({text: 'Al menos debe de haber una pregunta a la revisión'})
+    if (this.form.questions.length == 0) return Swal.fire({text: 'Al menos se debe crear una pregunta para la lista de revisión'})
 
     if (this.form.responsable && this.form.date && this.form.hours >= 0) {
       this.form.status = status
 
       if (!this.form.update) {
-        this.routineMttoService
+        this.typeSystemService
           .saveTypeSystemRevision(this.form)
           .subscribe((res:any) => {
             if (res.success) {
@@ -136,7 +136,7 @@ export class TypeSystemComponent implements OnInit {
             }
           })
       } else {
-        this.routineMttoService
+        this.typeSystemService
           .updateTypeSystemRevision(this.form)
           .subscribe((res:any) => {
             if (res.success) {
@@ -153,10 +153,10 @@ export class TypeSystemComponent implements OnInit {
     }
   }
 
-  getFormName(country) {
+  getFormName(type_component_id) {
     this.loadFormName = false
-    this.formService
-      .getFormName({country})
+    this.typeSystemService
+      .getFormName({type_component_id})
       .subscribe((res:any) => {
         this.responseForm = res.data;
         this.loadFormName = true
@@ -166,18 +166,20 @@ export class TypeSystemComponent implements OnInit {
   selectComponent($event): void {
     if ($event.itemData) {
       console.log($event.itemData)
-      this.form.component_id = $event.itemData.id
+      this.form.type_component_id = $event.itemData.id
       this.form.form_id = null
       this.form.questions = []
-      const index = this.responseComponent.findIndex((item:any) => item.id === $event.itemData.id)
+      const index = this.responseTypeComponent.findIndex((item:any) => item.id === $event.itemData.id)
       if (index != -1) {
-        this.getFormName(this.responseComponent[index].country)
+        this.getFormName($event.itemData.id)
       }
     }
   }
 
   selectForm($event): void {
     if ($event.itemData) {
+      console.log($event.itemData)
+      console.log(this.responseForm)
       this.form.form_id = $event.itemData.id
       const index = this.responseForm.findIndex((item:any) => item.id === $event.itemData.id)
       if (index != -1) this.form.questions = this.responseForm[index].questions.map((item:any) => {

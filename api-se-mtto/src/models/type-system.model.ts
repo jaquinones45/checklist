@@ -54,6 +54,97 @@ class typeSystemModel {
     });
   }
 
+  static async getComponentNameDB(
+    client_id:any | undefined, 
+  ): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const conn = await db.connect();
+        const query = `
+          SELECT
+            [type_component].id,
+            [type_component].name
+          FROM [component]
+          INNER JOIN [type_component] ON [type_component].id = [component].type_component_id
+          WHERE [component].client_id = ${client_id}
+            AND [component].deleted = 0
+            AND [type_component].deleted = 0
+          GROUP BY [type_component].id, [type_component].name
+          ORDER BY [type_component].name ASC
+        `
+        const result = await conn.query(query);
+        // retornar los datos
+        resolve(result.recordset);
+      } catch (error) {
+        console.error("An error ocurred getComponentNameDB: ", error);
+        reject(error);
+      }
+    });
+  }
+
+  static async getFormNameDB(
+    type_component_id:any | undefined, 
+  ): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const conn = await db.connect();
+        const query = `
+          SELECT
+            [form].id,
+            [form].name,
+            [question].id AS question_id,
+            [question].name AS question_name,
+            [question].question
+          FROM [form]
+          INNER JOIN [question] ON [question].form_id = [form].id
+          WHERE [form].type_component_id = ${type_component_id}
+            AND [form].deleted = 0
+            AND [question].deleted = 0
+          ORDER BY [form].name ASC
+        `
+        const result = await conn.query(query);
+        // lodash
+        const data = lodash
+          .chain(result.recordset)
+          .groupBy('id')
+          .map((value, key) => ({
+            id: parseInt(key),
+            name: value[0].name,
+            total: value.length,
+            questions: value
+          }))
+          .value();
+        // retornar los datos
+        resolve(data);
+      } catch (error) {
+        console.error("An error ocurred getFormNameDB: ", error);
+        reject(error);
+      }
+    });
+  }
+
+  static async getTypeQuestionNameDB(): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const conn = await db.connect();
+        const query = `
+          SELECT
+            [type_question].id,
+            [type_question].alias AS name,
+            [type_question].default_value
+          FROM [type_question]
+          ORDER BY [type_question].name ASC
+        `
+        const result = await conn.query(query);
+        // retornar los datos
+        resolve(result.recordset);
+      } catch (error) {
+        console.error("An error ocurred getTypeQuestionNameDB: ", error);
+        reject(error);
+      }
+    });
+  }
+
   static async getTypeSystemDB(
     name:any | undefined, 
     plant_id:any | undefined, 
@@ -65,29 +156,31 @@ class typeSystemModel {
         const conn = await db.connect();
         const query = `
           SELECT
-            [type_system].id, 
+            [system].id, 
+            [type_system].id AS type_system_id, 
             [type_system].name, 
-            [type_system].quantity_revision, 
-            [type_system].last_date, 
+            [system].quantity_revision, 
+            [system].last_date, 
             [plant].id AS plant_id,
             [plant].name AS planta,
             [plant].client_id
-          FROM [type_system]
-          INNER JOIN [plant] ON [plant].id = [type_system].plant_id
+          FROM [system]
+          INNER JOIN [plant] ON [plant].id = [system].plant_id
+          INNER JOIN [type_system] ON [type_system].id = [system].type_system_id
           WHERE [plant].client_id = ${client_id}
             AND ${name 
               ? `[type_system].name LIKE '%${plant_id}%'`
               : '[type_system].name IS NOT NULL'
             }
             AND ${plant_id 
-              ? `[type_system].plant_id = ${plant_id}`
-              : '[type_system].plant_id IS NOT NULL'
+              ? `[system].plant_id = ${plant_id}`
+              : '[system].plant_id IS NOT NULL'
             }
             ${date 
-              ? `AND [type_system].last_date = '${this.convertDateTime(new Date(date))}'`
+              ? `AND [system].last_date = '${this.convertDateTime(new Date(date))}'`
               : ''
             }
-          ORDER BY [type_system].id DESC
+          ORDER BY [system].id DESC
         `
         const result = await conn.query(query);
         // retornar los datos
@@ -112,17 +205,17 @@ class typeSystemModel {
             [revision].date, 
             [revision].hours, 
             [revision].status,
-            [revision].type_system_id,
-            [revision].component_id,
-            [component].name AS component_name,
+            [revision].system_id,
+            [revision].type_component_id,
+            [type_component].name AS component_name,
             [revision].form_id,
             [form].name AS form_name
           FROM [revision]
-          INNER JOIN [component] ON [component].id = [revision].component_id
+          INNER JOIN [type_component] ON [type_component].id = [revision].type_component_id
           INNER JOIN [form] ON [form].id = [revision].form_id
-          WHERE [revision].type_system_id = ${type_system_id}
+          WHERE [revision].system_id = ${type_system_id}
             AND [revision].deleted = 0
-            AND [component].deleted = 0
+            AND [type_component].deleted = 0
             AND [form].deleted = 0
           ORDER BY [revision].id DESC
         `
@@ -156,16 +249,15 @@ class typeSystemModel {
             [question_revision].question_id,
             [question].name AS question_name,
             [question].question,
-            [revision].component_id,
-            [component].name AS component_name,
-            [component].country,
+            [revision].type_component_id,
+            [type_component].name AS type_component_name,
             [revision].form_id,
             [form].name AS form_name
           FROM [revision]
           INNER JOIN [question_revision] ON [question_revision].revision_id = [revision].id
           INNER JOIN [question] ON [question].id = [question_revision].question_id
           INNER JOIN [type_question] ON [type_question].id = [question_revision].type_question_id
-          INNER JOIN [component] ON [component].id = [revision].component_id
+          INNER JOIN [type_component] ON [type_component].id = [revision].type_component_id
           INNER JOIN [form] ON [form].id = [revision].form_id
           WHERE [revision].id = ${revision_id}
             AND [revision].deleted = 0
@@ -177,15 +269,15 @@ class typeSystemModel {
           .chain(result.recordset)
           .groupBy('id')
           .map((value, key) => ({
-            id: key,
+            id: parseInt(key),
             responsable: value[0].responsable,
             date: value[0].date,
             hours: value[0].hours,
             status: value[0].status,
             country: value[0].country,
             type_system_id: value[0].type_system_id,
-            component_id: value[0].component_id,
-            component_name: value[0].component_name,
+            type_component_id: value[0].type_component_id,
+            type_component_name: value[0].type_component_name,
             form_id: value[0].form_id,
             form_name: value[0].form_name,
             total: value.length,
@@ -251,7 +343,7 @@ class typeSystemModel {
     hours:any | undefined,
     status:any | undefined,
     type_system_id:any | undefined,
-    component_id:any | undefined, 
+    type_component_id:any | undefined, 
     form_id:any | undefined,
     questions:any | undefined,
   ): Promise<any> {
@@ -261,10 +353,11 @@ class typeSystemModel {
 
         const insert_revision = `
           INSERT INTO [revision] 
-            (responsable, date, hours, status, type_system_id, component_id, form_id)
+            (responsable, date, hours, status, type_system_id, type_component_id, form_id)
           VALUES
-            ('${responsable}', '${this.convertDateTime(new Date(date))}', ${hours}, '${status}', ${type_system_id}, ${component_id}, ${form_id})
+            ('${responsable}', '${this.convertDateTime(new Date(date))}', ${hours}, '${status}', ${type_system_id}, ${type_component_id}, ${form_id})
         `
+        console.log(insert_revision)
         await conn.query(insert_revision);
         //
         const select_revision = `
@@ -273,11 +366,12 @@ class typeSystemModel {
             status
           FROM [revision]
           WHERE type_system_id = ${type_system_id}
-            AND component_id = ${component_id}
+            AND type_component_id = ${type_component_id}
             AND form_id = ${form_id}
             AND deleted = 0
           ORDER BY id DESC
         `
+        console.log(select_revision)
         const result_revision = await conn.query(select_revision);
         // Actualizar la ultima revision
         if (status == 'completed') {
@@ -288,10 +382,12 @@ class typeSystemModel {
               last_date = '${this.convertDateTime(new Date())}'
             WHERE id = ${type_system_id}
           `
+          console.log(query)
           await conn.query(query);
           //
         }
-        
+        console.log(result_revision.recordset[0].id)
+        console.log(questions)
         this.insertQuestionRevision(result_revision.recordset[0].id, questions)
         // retornar la respuesta
         resolve({
@@ -360,7 +456,7 @@ class typeSystemModel {
     hours:any | undefined,
     status:any | undefined,
     type_system_id:any | undefined,
-    component_id:any | undefined, 
+    type_component_id:any | undefined, 
     form_id:any | undefined,
     questions:any | undefined,
   ): Promise<any> {
@@ -377,10 +473,11 @@ class typeSystemModel {
             hours = '${hours}',
             status = '${status}',
             type_system_id = ${type_system_id},
-            component_id = ${component_id},
+            type_component_id = ${type_component_id},
             form_id = ${form_id}
           WHERE id = ${id}
         `
+        console.log(query)
         await conn.query(query);
         // Actualizar la ultima revision
         if (status == 'completed') {
@@ -389,11 +486,12 @@ class typeSystemModel {
               id
             FROM [revision]
             WHERE type_system_id = ${type_system_id}
-              AND component_id = ${component_id}
+              AND type_component_id = ${type_component_id}
               AND form_id = ${form_id}
               AND status = '${status}'
               AND deleted = 0
           `
+          console.log(select_type_system)
           const resul_type_system = await conn.query(select_type_system);
 
           const query = `
@@ -402,6 +500,7 @@ class typeSystemModel {
               last_date = '${this.convertDateTime(new Date())}'
             WHERE id = ${type_system_id}
           `
+          console.log(query)
           await conn.query(query);
         }
         // Eliminar las preguntas
@@ -409,6 +508,7 @@ class typeSystemModel {
           DELETE FROM [question_revision] 
           WHERE [question_revision].revision_id = ${id};
         `
+        console.log(deleted)
         await conn.query(deleted);
         // 
         this.insertQuestionRevision(id, questions)
@@ -433,6 +533,7 @@ class typeSystemModel {
         VALUES
           ('${question.notes}', ${question.type_question_id}, ${question.question_id}, ${revision_id})
       `
+      console.log(query)
       await conn.query(query);
     })
   }
