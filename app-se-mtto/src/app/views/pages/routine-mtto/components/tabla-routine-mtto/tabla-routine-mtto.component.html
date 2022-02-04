@@ -5,34 +5,28 @@
         <tr class="font-overpass">
           <th class="text-left" style="width:3%">#</th>
           <th class="text-center" style="width:5%">Estado</th>
-          <th class="text-left" style="width:10%">Tipo de Sistema</th>
           <th class="text-left" style="width:5%">Planta</th>
-          <th class="text-center" style="width:5%">Revisiones</th>
+          <th class="text-left" style="width:10%">Tipo de Sistema</th>
           <th class="text-left" style="width:15%">Responsable</th>
-          <th class="text-left" style="width:5%">Última revisión</th>
+          <th class="text-left" style="width:5%">Fecha</th>
           <th class="text-center" style="width:5%">Horas</th>
-          <th class="text-left" style="width:5%">Componente</th>
           <th class="text-left" style="width:5%">Lista de revisión</th>
-          <th class="text-left" style="width:10%">Pregunta</th>
-          <th class="text-left" style="width:5%">Resultado</th>
-          <th class="text-left" style="width:22%">Notas</th>
+          <th class="text-left" style="width:5%">Cant. Ok</th>
+          <th class="text-left" style="width:5%">Cant. OBS</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let element of datos" style="cursor: pointer">
           <td class="text-left">{{ element.id }}</td>
           <td class="text-left">{{ getStatusName(element.status) }}</td>
-          <td class="text-left">{{ element.name }}</td>
           <td class="text-left">{{ element.planta_name }}</td>
-          <td class="text-center">{{ element.quantity_revision }}</td>
+          <td class="text-left">{{ element.name }}</td>
           <td class="text-left">{{ element.responsable }}</td>
-          <td class="text-left">{{ element.last_date | date: 'yyyy-MM-dd HH:mm' }}</td>
+          <td class="text-left">{{ element.date | date: 'yyyy-MM-dd HH:mm' }}</td>
           <td class="text-center">{{ element.hours }}</td>
-          <td class="text-left">{{ element.type_component_name }}</td>
           <td class="text-left">{{ element.form_name }}</td>
-          <td class="text-left">{{ element.question }}</td>
-          <td class="text-left">{{ element.type_question_name }}</td>
-          <td class="text-left">{{ element.notes }}</td>
+          <td class="text-center"></td>
+          <td class="text-center"></td>
         </tr>
       </tbody>
     </table>
@@ -44,17 +38,15 @@
       <tr class="font-overpass">
         <th class="text-left" style="width:3%">#</th>
         <th class="text-center" style="width:5%">Estado</th>
-        <th class="text-left" style="width:10%">Tipo de Sistema</th>
         <th class="text-left" style="width:5%">Planta</th>
-        <th class="text-center" style="width:5%">Revisiones</th>
+        <th class="text-left" style="width:10%">Tipo de Sistema</th>
         <th class="text-left" style="width:15%">Responsable</th>
-        <th class="text-left" style="width:5%">Última revisión</th>
+        <th class="text-left" style="width:5%">Fecha</th>
         <th class="text-center" style="width:5%">Horas</th>
-        <th class="text-left" style="width:5%">Componente</th>
         <th class="text-left" style="width:5%">Lista de revisión</th>
-        <th class="text-left" style="width:10%">Pregunta</th>
-        <th class="text-left" style="width:5%">Resultado</th>
-        <th class="text-left" style="width:22%">Notas</th>
+        <th class="text-left" style="width:5%">Cant. Ok</th>
+        <th class="text-left" style="width:5%">Cant. OBS</th>
+        <th class="text-center" style="width:5%">Acciones</th>
       </tr>
     </thead>
     <tbody>
@@ -71,17 +63,19 @@
             <circle cx="8" cy="8" r="5" [attr.fill]="getStatusFill(element.status)"/>          
           </svg>
         </td>
-        <td class="text-left">{{ element.name }}</td>
         <td class="text-left">{{ element.planta_name }}</td>
-        <td class="text-center">{{ element.quantity_revision }}</td>
+        <td class="text-left">{{ element.name }}</td>
         <td class="text-left">{{ element.responsable }}</td>
-        <td class="text-left">{{ element.last_date | date: 'yyyy-MM-dd HH:mm' }}</td>
+        <td class="text-left">{{ element.date | date: 'yyyy-MM-dd HH:mm' }}</td>
         <td class="text-center">{{ element.hours }}</td>
-        <td class="text-left">{{ element.type_component_name }}</td>
         <td class="text-left">{{ element.form_name }}</td>
-        <td class="text-left">{{ element.question }}</td>
-        <td class="text-left">{{ element.type_question_name }}</td>
-        <td class="text-left">{{ element.notes }}</td>
+        <td class="text-center"></td>
+        <td class="text-center"></td>
+        <td class="text-center">
+          <app-modal-routine-mtto-detail
+            [revision_id]="element.id"
+          ></app-modal-routine-mtto-detail>
+        </td>
       </tr>
     </tbody>
   </table>

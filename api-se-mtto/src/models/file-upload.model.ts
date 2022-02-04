@@ -14,7 +14,7 @@ class fileUploadModel {
         // retornar los datos
         resolve(true);
       } catch (error) {
-        console.error("An error ocurred ∫: ", error);
+        console.error("An error ocurred saveFileUploadDB: ", error);
         reject(error);
       }
     });

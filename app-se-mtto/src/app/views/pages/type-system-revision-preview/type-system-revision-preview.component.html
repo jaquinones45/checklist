@@ -1,0 +1,135 @@
+<div class="row">
+
+  <div class="col-12 col-md-3 grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-10 pb-3">
+            <div class="titulo">{{ form.update ? 'EDICCIÓN' : 'CREACIÓN' }} DE REVISIÓN</div>
+            <div class="subtitulo mb-2">{{ form.update ? 'edición' : 'creación' }} de revision del tipo de sistema.</div>
+          </div>
+          <div class="col-2">
+            <div class="d-flex justify-content-end">
+              <a 
+                mat-button href="javascript:void(0)" 
+                class="pr-1"
+                data-toggle="tooltip" 
+                data-placement="top" 
+                title="Volver Atras"
+              >
+                <i 
+                  (click)="goBack()"
+                  class="feather icon-arrow-left"
+                  style="cursor: pointer;font-size: 20px;color: #C4C4C4;"
+                ></i>
+              </a>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="row">
+              <div class="col-12 pb-3">
+                <label for="name" class="block">Responsable *</label>
+                <input 
+                  id="name" 
+                  type="text" 
+                  class="form-control form-control-sm text-sm cusFilter"
+                  [(ngModel)]="form.responsable"
+                  placeholder="Responsable"
+                />
+              </div>
+              <div class="col-12 pb-3">
+                <label for="name" class="block">Fecha *</label>
+                <ejs-datetimepicker
+                  [value]="form.date"
+                  placeholder="FECHA DE CONSULTA"
+                  (change)="onChangeDateTime($event)"
+                ></ejs-datetimepicker>
+              </div>
+              <div class="col-12 pb-3">
+                <label for="name" class="block">Horas *</label>
+                <input 
+                  id="hours" 
+                  type="number" 
+                  class="form-control form-control-sm text-sm cusFilter"
+                  [(ngModel)]="form.hours"
+                  placeholder="Horas"
+                  min="0"
+                />
+              </div>
+              <div class="col-12 pb-3">
+                <div class="form-group">
+                  <label class="control-label">Lista de revision *</label>
+                  <ejs-dropdownlist 
+                    id='ddlelement1' 
+                    class="col-12 p-0" 
+                    [dataSource]='responseForm'
+                    [fields]="{ text: 'name', value: 'id' }"
+                    [(value)]='form.form_id'
+                    (select)="selectForm($event)"
+                    *ngIf="loadFormName"
+                  ></ejs-dropdownlist>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+          
+        </div>
+
+        <div class="row pt-2 text-center">
+          <div class="col-12">
+            <button 
+              class="btn btn-outline-success btn-sm mr-1" 
+              type="button"
+              (click)="saveOrUpdateRevision('previous')"
+            >
+              <i class="feather icon-save"></i> Guardar y continuar
+            </button>
+            <button 
+              class="btn btn-outline-success btn-sm ml-1" 
+              type="button"
+              (click)="saveOrUpdateRevision('completed')"
+            >
+              <i class="feather icon-save"></i> Guardar y completar
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-9  grid-margin stretch-card" *ngIf="newQuestion">
+    <div class="card overflow-hidden">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-12">
+            <ejs-tab 
+              id="element1" 
+              class="mt-2 e-fill" 
+              headerPlacement="Left"
+            >
+              <e-tabitems>
+
+                <e-tabitem *ngFor="let item of form.components">
+                  <ng-template #headerText>
+                    <div> {{ item.name }}  </div>
+                  </ng-template>
+                  <ng-template #content>
+
+                    <app-tabla-revision-form
+                      [data]="item.questions"
+                      *ngIf="item.questions.length > 0"
+                    ></app-tabla-revision-form>
+
+                  </ng-template>
+                </e-tabitem>
+
+              </e-tabitems>
+            </ejs-tab>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -17,7 +17,7 @@ export class FormMttoCorrectiveComponent {
   plants: any = []
   @Input() id
   @Input() nombre
-  @Input() data = {id: null, description: '', notes: '', hours: 0, equipment_id: null, plant_id: null, client_id: localStorage.getItem('client_id'), load: false}
+  @Input() data = {id: null, description: '', notes: '', hours: 0, responsable: '', date: '', equipment: '', plant_id: null, type_system_id: null, type_component_system_id: null, client_id: localStorage.getItem('client_id'), load: false}
   @Input() update: boolean = false
   @Output() refresh = new EventEmitter<any>();
   
@@ -26,9 +26,13 @@ export class FormMttoCorrectiveComponent {
   public localFields: Object = { text: 'name' }
 
   loadPlant: boolean = false;
+  loadSystem: boolean = false;
+  loadComponent: boolean = false;
   loadEquipment: boolean = false;
 
   responsePlant: any;
+  responseSystem: any;
+  responseComponent: any;
   responseEquipment: any;
 
   message: string = '';
@@ -36,7 +40,7 @@ export class FormMttoCorrectiveComponent {
 
   constructor(
     private modalService: NgbModal, 
-    private typeSystemService: MttoCorrectiveService,
+    private mttoCorrectiveService: MttoCorrectiveService,
     private config: NgbModalConfig
     ) {
       this.config.backdrop = 'static';
@@ -61,15 +65,17 @@ export class FormMttoCorrectiveComponent {
     this.modal = true
 
     this.getPlantName()
-    this.getEquipmentName()
 
     this.message = ''
     this.error = ''
 
-    if (!this.update) this.data = {id: null, description: '', notes: '', hours: 0, equipment_id: null, plant_id: null, client_id: localStorage.getItem('client_id'), load: false}
-
+    if (!this.update) this.data = {id: null, description: '', notes: '', hours: 0, responsable: '', date: '', equipment: '', plant_id: null, type_system_id: null, type_component_system_id: null, client_id: localStorage.getItem('client_id'), load: false}
+    else {
+      this.getSystemName({plant_id: this.data.plant_id})
+      this.getComponentName({type_system_id: this.data.type_system_id})
+    }
     this.modalService.open(content,
-      { centered: true, ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      { size: 'lg', centered: true, ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
         this.closeResult = `Closed with: ${result}`;
       }, (reason) => {
         this.closeResult =
@@ -92,7 +98,7 @@ export class FormMttoCorrectiveComponent {
       client_id: localStorage.getItem('client_id'),
     }
     this.loadPlant = false
-    this.typeSystemService
+    this.mttoCorrectiveService
       .getPlantName(params)
       .subscribe((res:any) => {
         this.responsePlant = res.data;
@@ -100,17 +106,48 @@ export class FormMttoCorrectiveComponent {
       });
   }
 
-  getEquipmentName() {
-    const params = {
-      client_id: localStorage.getItem('client_id'),
-    }
-    this.loadEquipment = false
-    this.typeSystemService
-      .getEquipmentName(params)
+  getSystemName(params) {
+    this.loadSystem = false
+    this.mttoCorrectiveService
+      .getSystemName(params)
       .subscribe((res:any) => {
-        this.responseEquipment = res.data;
-        this.loadEquipment = true
+        this.responseSystem = res.data;
+        this.loadSystem = true
       });
+  }
+
+  getComponentName(params) {
+    this.loadComponent = false
+    this.mttoCorrectiveService
+      .getComponentName(params)
+      .subscribe((res:any) => {
+        this.responseComponent = res.data;
+        this.loadComponent = true
+      });
+  }
+
+  selectPlant($event) {
+    console.log($event)
+    if ($event.itemData) {
+      this.data.type_system_id = null
+      this.data.type_component_system_id = null
+      const params = {
+        plant_id: $event.itemData.id,
+      }
+      this.getSystemName(params)
+    }
+  }
+
+  selectSystem($event) {
+    console.log($event)
+    console.log($event.itemData.id)
+    if ($event.itemData) {
+      this.data.type_component_system_id = null
+      const params = {
+        type_system_id: $event.itemData.id,
+      }
+      this.getComponentName(params)
+    }
   }
 
   clickSaveOrUpdate(form: NgForm) {
@@ -120,9 +157,9 @@ export class FormMttoCorrectiveComponent {
       this.message = ''
       this.error = ''
       this.data.load = true
-      if (this.data.equipment_id && this.data.plant_id) {
+      if (this.data.plant_id && this.data.plant_id) {
         if (!this.update) {
-          this.typeSystemService
+          this.mttoCorrectiveService
             .saveMttoCorrective(this.data)
             .subscribe((response:any) => {
               this.loadRefreshPage = true;
@@ -132,7 +169,7 @@ export class FormMttoCorrectiveComponent {
                 this.modal = false
                 setTimeout( () => {
                   document.getElementById("closeModal").click()
-                  this.data = {id: null, description: '', notes: '', hours: 0, equipment_id: null, plant_id: null, client_id: localStorage.getItem('client_id'), load: false}
+                  this.data = {id: null, description: '', notes: '', hours: 0, responsable: '', date: '', equipment: '', plant_id: null, type_system_id: null, type_component_system_id: null, client_id: localStorage.getItem('client_id'), load: false}
                 }, 2000 )
               } else {
                 this.data.load = false
@@ -144,7 +181,7 @@ export class FormMttoCorrectiveComponent {
               console.log(error);
             })
         } else {
-          this.typeSystemService
+          this.mttoCorrectiveService
             .updateMttoCorrective(this.data)
             .subscribe((response:any) => {
               this.loadRefreshPage = true;
@@ -154,7 +191,7 @@ export class FormMttoCorrectiveComponent {
                 this.modal = false
                 setTimeout( () => {
                   document.getElementById("closeModal").click()
-                  this.data = {id: null, description: '', notes: '', hours: 0, equipment_id: null, plant_id: null, client_id: localStorage.getItem('client_id'), load: false}
+                  this.data = {id: null, description: '', notes: '', hours: 0, responsable: '', date: '', equipment: '', plant_id: null, type_system_id: null, type_component_system_id: null, client_id: localStorage.getItem('client_id'), load: false}
                 }, 2000 )
               } else {
                 this.data.load = false
@@ -168,6 +205,10 @@ export class FormMttoCorrectiveComponent {
         }
       }
     }
+  }
+
+  onChangeDateTime($event) {
+    this.data.date = $event.value
   }
 
   sendRefresh() {

@@ -11,6 +11,8 @@ import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
 
 import { TablaRoutineMttoComponent } from './components/tabla-routine-mtto/tabla-routine-mtto.component';
 
+import { ModalRoutineMttoDetailComponent } from './components/modal-routine-mtto-detail/modal-routine-mtto-detail.component';
+
 const routes: Routes = [
   {
     path: '',
@@ -22,6 +24,7 @@ const routes: Routes = [
     RoutineMttoComponent,
     //Tabla
     TablaRoutineMttoComponent,
+    ModalRoutineMttoDetailComponent,
   ],
   imports: [
     CommonModule,

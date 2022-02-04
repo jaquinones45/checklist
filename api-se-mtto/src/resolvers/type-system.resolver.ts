@@ -44,9 +44,9 @@ const getComponentName = async (req: Request, res: Response): Promise<Response |
 
 const getFormName = async (req: Request, res: Response): Promise<Response | void> => {
   try {
-    const { type_component_id } = req.query;
+    const { client_id } = req.query;
     const result:any = await typeSystemController.getFormName(
-      type_component_id
+      client_id
     );
     res.status(OK).json({data: result, success: true})
   } catch (error) {
@@ -120,9 +120,9 @@ const saveTypeSystem = async (req: Request, res: Response): Promise<Response | v
 
 const saveTypeSystemRevision = async (req: Request, res: Response): Promise<Response | void> => {
   try {
-    const { responsable, date, hours, status, type_system_id, type_component_id, form_id, questions } = req.body;
+    const { responsable, date, hours, status, system_id, form_id, components } = req.body;
     const result = await typeSystemController.saveTypeSystemRevision(
-      responsable, date, hours, status, type_system_id, type_component_id, form_id, questions
+      responsable, date, hours, status, system_id, form_id, components
     );
     res.status(OK).json(result)
   } catch (error) {
@@ -148,9 +148,9 @@ const updateTypeSystem = async (req: Request, res: Response): Promise<Response |
 const updateTypeSystemRevision = async (req: Request, res: Response): Promise<Response | void> => {
   try {
     const { id } = req.params
-    const { responsable, date, hours, status, type_system_id, type_component_id, form_id, questions } = req.body;
+    const { responsable, date, hours, status, system_id, form_id, components } = req.body;
     const result:any = await typeSystemController.updateTypeSystemRevision(
-      id, responsable, date, hours, status, type_system_id, type_component_id, form_id, questions
+      id, responsable, date, hours, status, system_id, form_id, components
     );
     res.status(OK).json(result)
   } catch (error) {

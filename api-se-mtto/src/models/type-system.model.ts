@@ -83,7 +83,7 @@ class typeSystemModel {
   }
 
   static async getFormNameDB(
-    type_component_id:any | undefined, 
+    client_id:any | undefined, 
   ): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
@@ -93,11 +93,16 @@ class typeSystemModel {
             [form].id,
             [form].name,
             [question].id AS question_id,
-            [question].name AS question_name,
-            [question].question
+            [question].question,
+            [type_component].id AS type_component_id,
+            [type_component].name AS type_component_name,
+            1 AS type_question_id,
+			      '' AS notes
           FROM [form]
           INNER JOIN [question] ON [question].form_id = [form].id
-          WHERE [form].type_component_id = ${type_component_id}
+          INNER JOIN [client] ON [client].country_id = [form].country_id
+          INNER JOIN [type_component] ON [type_component].id = [question].type_component_id
+          WHERE [client].id = ${client_id}
             AND [form].deleted = 0
             AND [question].deleted = 0
           ORDER BY [form].name ASC
@@ -107,11 +112,18 @@ class typeSystemModel {
         const data = lodash
           .chain(result.recordset)
           .groupBy('id')
-          .map((value, key) => ({
-            id: parseInt(key),
-            name: value[0].name,
-            total: value.length,
-            questions: value
+          .map((value_parent, key_parent) => ({
+            id: parseInt(key_parent),
+            name: value_parent[0].name,
+              components: lodash
+              .chain(value_parent)
+              .groupBy('type_component_id')
+              .map((value, key) => ({
+                id: parseInt(key),
+                name: value[0].type_component_name,
+                questions: value
+              }))
+              .value()
           }))
           .value();
         // retornar los datos
@@ -206,16 +218,12 @@ class typeSystemModel {
             [revision].hours, 
             [revision].status,
             [revision].system_id,
-            [revision].type_component_id,
-            [type_component].name AS component_name,
             [revision].form_id,
             [form].name AS form_name
           FROM [revision]
-          INNER JOIN [type_component] ON [type_component].id = [revision].type_component_id
           INNER JOIN [form] ON [form].id = [revision].form_id
           WHERE [revision].system_id = ${type_system_id}
             AND [revision].deleted = 0
-            AND [type_component].deleted = 0
             AND [form].deleted = 0
           ORDER BY [revision].id DESC
         `
@@ -242,23 +250,25 @@ class typeSystemModel {
             [revision].date, 
             [revision].hours, 
             [revision].status,
-            [revision].type_system_id,
+            [revision].system_id,
+            [type_system].name AS type_system_name,
             [question_revision].notes,
             [question_revision].type_question_id,
             [type_question].alias AS type_question_name,
             [question_revision].question_id,
             [question].name AS question_name,
             [question].question,
-            [revision].type_component_id,
-            [type_component].name AS type_component_name,
             [revision].form_id,
-            [form].name AS form_name
+            [form].name AS form_name,
+            [type_component].name AS type_component_name
           FROM [revision]
           INNER JOIN [question_revision] ON [question_revision].revision_id = [revision].id
           INNER JOIN [question] ON [question].id = [question_revision].question_id
           INNER JOIN [type_question] ON [type_question].id = [question_revision].type_question_id
-          INNER JOIN [type_component] ON [type_component].id = [revision].type_component_id
           INNER JOIN [form] ON [form].id = [revision].form_id
+          INNER JOIN [system] ON [system].id = [revision].system_id
+          INNER JOIN [type_system] ON [type_system].id = [system].type_system_id
+          INNER JOIN [type_component] ON [type_component].id = [question].type_component_id
           WHERE [revision].id = ${revision_id}
             AND [revision].deleted = 0
           ORDER BY [revision].id DESC
@@ -274,10 +284,8 @@ class typeSystemModel {
             date: value[0].date,
             hours: value[0].hours,
             status: value[0].status,
-            country: value[0].country,
-            type_system_id: value[0].type_system_id,
-            type_component_id: value[0].type_component_id,
-            type_component_name: value[0].type_component_name,
+            system_id: value[0].system_id,
+            type_system_name: value[0].type_system_name,
             form_id: value[0].form_id,
             form_name: value[0].form_name,
             total: value.length,
@@ -342,10 +350,9 @@ class typeSystemModel {
     date:any | undefined,
     hours:any | undefined,
     status:any | undefined,
-    type_system_id:any | undefined,
-    type_component_id:any | undefined, 
+    system_id:any | undefined,
     form_id:any | undefined,
-    questions:any | undefined,
+    components:any | undefined,
   ): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
@@ -353,11 +360,10 @@ class typeSystemModel {
 
         const insert_revision = `
           INSERT INTO [revision] 
-            (responsable, date, hours, status, type_system_id, type_component_id, form_id)
+            (responsable, date, hours, status, system_id, form_id)
           VALUES
-            ('${responsable}', '${this.convertDateTime(new Date(date))}', ${hours}, '${status}', ${type_system_id}, ${type_component_id}, ${form_id})
+            ('${responsable}', '${this.convertDateTime(new Date(date))}', ${hours}, '${status}', ${system_id}, ${form_id})
         `
-        console.log(insert_revision)
         await conn.query(insert_revision);
         //
         const select_revision = `
@@ -365,9 +371,7 @@ class typeSystemModel {
             id,
             status
           FROM [revision]
-          WHERE type_system_id = ${type_system_id}
-            AND type_component_id = ${type_component_id}
-            AND form_id = ${form_id}
+          WHERE system_id = ${system_id}
             AND deleted = 0
           ORDER BY id DESC
         `
@@ -376,22 +380,21 @@ class typeSystemModel {
         // Actualizar la ultima revision
         if (status == 'completed') {
           const quantity_revision = result_revision.recordset.filter(item => item.status === 'completed').length;
+          console.log(quantity_revision)
           const query = `
-            UPDATE [type_system] SET
+            UPDATE [system] SET
               quantity_revision = ${quantity_revision},
               last_date = '${this.convertDateTime(new Date())}'
-            WHERE id = ${type_system_id}
+            WHERE id = ${system_id}
           `
           console.log(query)
           await conn.query(query);
           //
         }
-        console.log(result_revision.recordset[0].id)
-        console.log(questions)
-        this.insertQuestionRevision(result_revision.recordset[0].id, questions)
+        this.insertQuestionRevision(result_revision.recordset[0].id, components)
         // retornar la respuesta
         resolve({
-          message: `Se creo la revisión asignado a <b>${responsable}</b> exitosamente.`,
+          message: `Se creo la revisión asignada a <b>${responsable}</b> exitosamente.`,
           success: true
         });
       } catch (error) {
@@ -455,16 +458,15 @@ class typeSystemModel {
     date:any | undefined,
     hours:any | undefined,
     status:any | undefined,
-    type_system_id:any | undefined,
-    type_component_id:any | undefined, 
+    system_id:any | undefined,
     form_id:any | undefined,
-    questions:any | undefined,
+    components:any | undefined,
   ): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
         const conn = await db.connect();
 
-        const result = { message: `Se actualizo la revisión asignado a <b>${responsable}</b> exitosamente.`, success: true , error: '' }
+        const result = { message: `Se actualizo la revisión asignada a <b>${responsable}</b> exitosamente.`, success: true , error: '' }
 
         const query = `
           UPDATE [revision] SET
@@ -472,12 +474,10 @@ class typeSystemModel {
             date = '${this.convertDateTime(new Date(date))}',
             hours = '${hours}',
             status = '${status}',
-            type_system_id = ${type_system_id},
-            type_component_id = ${type_component_id},
+            system_id = ${system_id},
             form_id = ${form_id}
           WHERE id = ${id}
         `
-        console.log(query)
         await conn.query(query);
         // Actualizar la ultima revision
         if (status == 'completed') {
@@ -485,22 +485,18 @@ class typeSystemModel {
             SELECT
               id
             FROM [revision]
-            WHERE type_system_id = ${type_system_id}
-              AND type_component_id = ${type_component_id}
-              AND form_id = ${form_id}
+            WHERE system_id = ${system_id}
               AND status = '${status}'
               AND deleted = 0
           `
-          console.log(select_type_system)
           const resul_type_system = await conn.query(select_type_system);
 
           const query = `
-            UPDATE [type_system] SET
+            UPDATE [system] SET
               quantity_revision = ${resul_type_system.recordset.length},
               last_date = '${this.convertDateTime(new Date())}'
-            WHERE id = ${type_system_id}
+            WHERE id = ${system_id}
           `
-          console.log(query)
           await conn.query(query);
         }
         // Eliminar las preguntas
@@ -508,10 +504,9 @@ class typeSystemModel {
           DELETE FROM [question_revision] 
           WHERE [question_revision].revision_id = ${id};
         `
-        console.log(deleted)
         await conn.query(deleted);
         // 
-        this.insertQuestionRevision(id, questions)
+        this.insertQuestionRevision(id, components)
         // retornar la respuesta
         resolve(result);
       } catch (error) {
@@ -523,18 +518,19 @@ class typeSystemModel {
   
   static async insertQuestionRevision(
     revision_id:number,
-    questions:[]
+    components:[]
   ) {
     const conn = await db.connect();
-    questions.forEach(async (question:any) => {
-      const query = `
-        INSERT INTO [question_revision] 
-          (notes, type_question_id, question_id, revision_id)
-        VALUES
-          ('${question.notes}', ${question.type_question_id}, ${question.question_id}, ${revision_id})
-      `
-      console.log(query)
-      await conn.query(query);
+    components.forEach(async (component:any) => {
+      component.questions.forEach(async (question:any) => {
+        const query = `
+          INSERT INTO [question_revision] 
+            (notes, type_question_id, question_id, revision_id)
+          VALUES
+            ('${question.notes}', ${question.type_question_id}, ${question.question_id}, ${revision_id})
+        `
+        await conn.query(query);
+      })
     })
   }
 

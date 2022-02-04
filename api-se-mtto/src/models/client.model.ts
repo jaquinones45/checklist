@@ -132,7 +132,6 @@ class clientModel {
             AND deleted = 0
             AND id != ${id}
         `
-        console.log(validate)
         const result_validate = await conn.query(validate);
 
         if (result_validate.recordset.length) result.error = `El nombre <b>${name}</b> ya esta registrado`
@@ -143,7 +142,6 @@ class clientModel {
               country_id=${country_id}
             WHERE id = ${id}
           `
-          console.log(query)
           await conn.query(query)
           
           result.message = `Se actualizo el usuario <b>${name}</b> exitosamente.`

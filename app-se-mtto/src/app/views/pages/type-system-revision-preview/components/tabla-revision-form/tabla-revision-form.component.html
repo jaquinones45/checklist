@@ -3,7 +3,6 @@
     <table class="table table-sm">
       <thead>
         <tr class="font-overpass">
-          <th class="text-left" style="width:15%">Tipo</th>
           <th class="text-left" style="width:15%">Evaluación</th>
           <th class="text-left" style="width:25%">Resultado</th>
           <th class="text-left" style="width:60%">Notas</th>
@@ -11,7 +10,6 @@
       </thead>
       <tbody>
         <tr *ngFor="let element of original" style="cursor: pointer">
-          <td class="text-left p-1">{{ element.component_name }}</td>
           <td class="text-left p-1">{{ element.question }}</td>
           <td class="text-left p-1">{{ element.type_question_name }}</td>
           <td class="text-left p-1">{{ element.note }}</td>
@@ -20,11 +18,10 @@
     </table>
   </div>
 </div>
-<div class="table-responsive mt-3">
+<div class="table-responsive mt-0 ml-4 mb-4 mr-4">
   <table class="table table-sm">
     <thead>
       <tr class="font-overpass">
-        <th class="text-left" style="width:15%">Tipo</th>
         <th class="text-left" style="width:15%">Evaluación</th>
         <th class="text-left" style="width:25%">Resultado</th>
         <th class="text-left" style="width:60%">Notas</th>
@@ -32,10 +29,24 @@
     </thead>
     <tbody>
       <tr *ngFor="let element of datos">
-        <td class="text-left p-1">{{ element.component_name }}</td>
         <td class="text-left p-1">{{ element.question }}</td>
-        <td class="text-left p-1">{{ element.type_question_name }}</td>
-        <td class="text-left p-1">{{ element.note }}</td>
+        <td class="text-left p-1">
+          <ejs-dropdownlist 
+            id='ddlelement1' 
+            class="col-12 p-0" 
+            [dataSource]='responseTypeQuestion'
+            [fields]="{ text: 'name', value: 'id' }"
+            [(value)]='element.type_question_id'
+          ></ejs-dropdownlist>
+        </td>
+        <td class="text-left p-1">
+          <textarea 
+            class="form-control form-control-sm text-sm cusFilter"
+            [(ngModel)]="element.notes"
+            rows="1"
+            *ngIf="element.type_question_id == 2"
+          ></textarea>
+        </td>
       </tr>
     </tbody>
   </table>

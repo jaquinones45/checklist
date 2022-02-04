@@ -43,7 +43,7 @@ export class TypeSystemService {
 
     getFormName<T>(param): Observable<T> {
         let httpParams = new HttpParams();
-        if (param.type_component_id && param.type_component_id != undefined) httpParams = httpParams.append('type_component_id', param.type_component_id)
+        if (param.client_id && param.client_id != undefined) httpParams = httpParams.append('client_id', param.client_id)
 
         const options = {
             params: httpParams,

@@ -41,11 +41,27 @@ const routes: Routes = [
           ),
       },
       {
-        path: "type-system/:id/revision",
+        path: "type-system/:type_system_id/revision",
         runGuardsAndResolvers: "always",
         loadChildren: () =>
           import("./views/pages/type-system-revision/type-system-revision.module").then(
             (m) => m.TypeSystemRevisionModule
+          ),
+      },
+      {
+        path: "type-system/:type_system_id/revision/preview",
+        runGuardsAndResolvers: "always",
+        loadChildren: () =>
+          import("./views/pages/type-system-revision-preview/type-system-revision-preview.module").then(
+            (m) => m.TypeSystemRevisionPreviewModule
+          ),
+      },
+      {
+        path: "type-system/:type_system_id/revision/preview/:revision_id",
+        runGuardsAndResolvers: "always",
+        loadChildren: () =>
+          import("./views/pages/type-system-revision-preview/type-system-revision-preview.module").then(
+            (m) => m.TypeSystemRevisionPreviewModule
           ),
       },
       {

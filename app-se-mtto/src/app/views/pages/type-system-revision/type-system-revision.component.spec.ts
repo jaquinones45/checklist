@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TypeSystemComponent } from './type-system-revision.component';
+import { TypeSystemRevisionComponent } from './type-system-revision.component';
 
-describe('TypeSystemComponent', () => {
-  let component: TypeSystemComponent;
-  let fixture: ComponentFixture<TypeSystemComponent>;
+describe('TypeSystemRevisionComponent', () => {
+  let component: TypeSystemRevisionComponent;
+  let fixture: ComponentFixture<TypeSystemRevisionComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TypeSystemComponent ]
+      declarations: [ TypeSystemRevisionComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TypeSystemComponent);
+    fixture = TestBed.createComponent(TypeSystemRevisionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

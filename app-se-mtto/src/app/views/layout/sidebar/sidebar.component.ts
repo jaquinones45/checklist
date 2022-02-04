@@ -146,26 +146,6 @@ export class SidebarComponent implements OnInit, AfterViewInit {
           icon: "database",
           link: "/kpi",
         },
-        {
-          label: "ARCHIVOS",
-          isTitle: true,
-          isArea: false,
-        },
-        {
-          label: "Archivos",
-          icon: "file",
-          link: "/files",
-        },
-        {
-          label: "CONFIGURACIÓN",
-          isTitle: true,
-          isArea: false,
-        },
-        {
-          label: "Configuración",
-          icon: "settings",
-          link: "/setting",
-        },
       ];
 
       return menuini;

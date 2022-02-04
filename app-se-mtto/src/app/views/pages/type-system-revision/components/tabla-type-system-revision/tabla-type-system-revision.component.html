@@ -7,9 +7,8 @@
           <th class="text-left" style="width:5%">Estado</th>
           <th class="text-left" style="width:15%">Responsable</th>
           <th class="text-left" style="width:15%">Fecha</th>
-          <th class="text-left" style="width:15%">Componente</th>
-          <th class="text-left" style="width:15%">Lista de revisión</th>
           <th class="text-center" style="width:5%">Horas</th>
+          <th class="text-left" style="width:15%">Lista de revisión</th>
         </tr>
       </thead>
       <tbody>
@@ -18,9 +17,8 @@
           <td class="text-left">{{ getStatusName(element.status) }}</td>
           <td class="text-left">{{ element.responsable }}</td>
           <td class="text-left">{{ element.date | date: 'yyyy-MM-dd HH:mm' }}</td>
-          <td class="text-left">{{ element.component_name }}</td>
-          <td class="text-left">{{ element.form_name }}</td>
           <td class="text-center">{{ element.hours }}</td>
+          <td class="text-left">{{ element.form_name }}</td>
         </tr>
       </tbody>
     </table>
@@ -31,12 +29,11 @@
     <thead>
       <tr class="font-overpass">
         <th class="text-left" style="width:5%">#</th>
-        <th class="text-left" style="width:5%">Estado</th>
+        <th class="text-center" style="width:5%">Estado</th>
         <th class="text-left" style="width:15%">Responsable</th>
         <th class="text-left" style="width:15%">Fecha</th>
-        <th class="text-left" style="width:15%">Componente</th>
-        <th class="text-left" style="width:15%">Lista de revisión</th>
         <th class="text-center" style="width:5%">Horas</th>
+        <th class="text-left" style="width:15%">Lista de revisión</th>
         <th class="text-center" style="width:10%">Acciones</th>
       </tr>
     </thead>
@@ -56,9 +53,8 @@
         </td>
         <td class="text-left">{{ element.responsable }}</td>
         <td class="text-left">{{ element.date | date: 'yyyy-MM-dd HH:mm' }}</td>
-        <td class="text-left">{{ element.component_name }}</td>
-        <td class="text-left">{{ element.form_name }}</td>
         <td class="text-center">{{ element.hours }}</td>
+        <td class="text-left">{{ element.form_name }}</td>
         <td class="text-center pt-1">
           <app-modal-type-system-revision-detail
             [revision_id]="element.id"

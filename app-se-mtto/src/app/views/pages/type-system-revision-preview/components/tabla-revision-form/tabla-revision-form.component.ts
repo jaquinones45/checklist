@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, Output, ViewChild, EventEmitter, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { TypeSystemService } from '../../../../../core/services/type-system.service'
+
 @Component({
   selector: 'app-tabla-revision-form',
   templateUrl: './tabla-revision-form.component.html',
@@ -15,19 +17,32 @@ export class TablaRevisionFormComponent implements OnInit {
   original: any;
   datos = [];
   page = 1
-  pageSize = 16
+  pageSize = 12
+
+  responseTypeQuestion:any = []
   
   constructor(
     private router: Router,
+    private typeSystemService: TypeSystemService,
   ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getTypeQuestionName()
+  }
   
   ngOnChanges() {
     this.original = this.data;
-    this.datos = this.data;
+    this.datos = this.data
     console.log(this.data)
     this.senData();
+  }
+
+  getTypeQuestionName() {
+    this.typeSystemService
+      .getTypeQuestionName()
+      .subscribe((res:any) => {
+        this.responseTypeQuestion = res.data;
+      });
   }
 
   senData() {

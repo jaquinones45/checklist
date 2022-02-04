@@ -8,6 +8,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MttoCorrectiveComponent } from './mtto-corrective.component';
 
 import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
+import { DateTimePickerModule  } from '@syncfusion/ej2-angular-calendars';
 
 import { TablaMttoCorrectiveComponent } from './components/tabla-mtto-corrective/tabla-mtto-corrective.component';
 import { FormMttoCorrectiveComponent } from './components/form-mtto-corrective/form-mtto-corrective.component';
@@ -31,7 +32,8 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     FormsModule,
     NgbModule,
-    DropDownListModule
+    DropDownListModule,
+    DateTimePickerModule
   ]
 })
 export class MttoCorrectiveModule { }

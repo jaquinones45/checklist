@@ -9,55 +9,120 @@
     <form #myForm="ngForm" (ngSubmit)="clickSaveOrUpdate(myForm)" novalidate>
       <div class="modal-body mt-0">
 
-        <div class="form-group">
-          <label class="control-label">Descripción del evento *</label>
-          <textarea 
-            name="description" 
-            class="form-control form-control-sm" 
-            [(ngModel)]="data.description"
-            placeholder="Descripción del evento"
-            required="true" 
-          ></textarea>
-        </div> 
-        <div class="form-group">
-          <label class="control-label">Notas</label>
-          <textarea 
-            name="notes" 
-            class="form-control form-control-sm" 
-            [(ngModel)]="data.notes"
-            placeholder="Notas"
-          ></textarea>
-        </div> 
-        <div class="form-group">
-          <label class="control-label">Horas</label>
-          <input
-            type="number"
-            name="hours" 
-            class="form-control form-control-sm" 
-            [(ngModel)]="data.hours"
-            placeholder="Horas"
-            min="0"
-          >
+        <div class="row">
+          <div class="col-6">
+            <div class="form-group">
+              <label class="control-label">Planta *</label>
+              <ejs-dropdownlist 
+                id='ddlelement1' 
+                class="col-12 p-0" 
+                [dataSource]='responsePlant'
+                [fields]="{ text: 'name', value: 'id' }"
+                [(value)]='data.plant_id'
+                (select)="selectPlant($event)"
+              ></ejs-dropdownlist>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label class="control-label">Sistema *</label>
+              <ejs-dropdownlist 
+                id='ddlelement1' 
+                class="col-12 p-0" 
+                [dataSource]='responseSystem'
+                [fields]="{ text: 'name', value: 'id' }"
+                [(value)]='data.type_system_id'
+                (select)="selectSystem($event)"
+              ></ejs-dropdownlist>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label class="control-label">Componente *</label>
+              <ejs-dropdownlist 
+                id='ddlelement1' 
+                class="col-12 p-0" 
+                [dataSource]='responseComponent'
+                [fields]="{ text: 'name', value: 'id' }"
+                [(value)]='data.type_component_system_id'
+              ></ejs-dropdownlist>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label class="control-label">Equipo</label>
+              <input
+                type="text"
+                name="equipment" 
+                class="form-control form-control-sm" 
+                [(ngModel)]="data.equipment"
+                placeholder="Equipo"
+              >
+            </div>
+          </div>
         </div>
-        <div class="form-group">
-          <label class="control-label">Equipo *</label>
-          <ejs-dropdownlist 
-            id='ddlelement1' 
-            class="col-12 p-0" 
-            [dataSource]='responseEquipment'
-            [fields]="{ text: 'name', value: 'id' }"
-            [(value)]='data.equipment_id'
-          ></ejs-dropdownlist>
+        <div class="row">
+          <div class="col-6">
+            <div class="form-group">
+              <label class="control-label">Responsable *</label>
+              <input
+                type="text"
+                name="responsable" 
+                class="form-control form-control-sm" 
+                [(ngModel)]="data.responsable"
+                placeholder="Responsable"
+              >
+            </div>
+          </div>
+          <div class="col-6">
+            <label for="name" class="block">Fecha *</label>
+            <ejs-datetimepicker
+              [value]="data.date"
+              placeholder="FECHA DE CONSULTA"
+              (change)="onChangeDateTime($event)"
+            ></ejs-datetimepicker>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label class="control-label">Horas</label>
+              <input
+                type="number"
+                name="hours" 
+                class="form-control form-control-sm" 
+                [(ngModel)]="data.hours"
+                placeholder="Horas"
+                min="0"
+              >
+            </div>
+          </div>
         </div>
-        <div class="form-group">
-          <label class="control-label">Planta *</label>
-          <ejs-dropdownlist 
-            id='ddlelement1' 
-            class="col-12 p-0" 
-            [dataSource]='responsePlant'
-            [fields]="{ text: 'name', value: 'id' }"
-            [(value)]='data.plant_id'
-          ></ejs-dropdownlist>
+        <div class="row">
+          <div class="col-6">
+            <div class="form-group">
+              <label class="control-label">Descripción del evento *</label>
+              <textarea 
+                name="description" 
+                class="form-control form-control-sm" 
+                [(ngModel)]="data.description"
+                placeholder="Descripción del evento"
+                required="true" 
+              ></textarea>
+            </div> 
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label class="control-label">Notas</label>
+              <textarea 
+                name="notes" 
+                class="form-control form-control-sm" 
+                [(ngModel)]="data.notes"
+                placeholder="Notas"
+              ></textarea>
+            </div>
+          </div>
+          <div class="col-6">
+
+          </div>
         </div>
 
         <div>

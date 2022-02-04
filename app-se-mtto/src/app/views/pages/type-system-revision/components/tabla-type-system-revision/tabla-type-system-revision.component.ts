@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, ViewChild, EventEmitter, ElementRef } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import Swal from 'sweetalert2/src/sweetalert2'
 
@@ -18,9 +19,12 @@ export class TablaTypeSystemRevisionComponent implements OnInit {
   original: any;
   datos = [];
   page = 1
-  pageSize = 16
+  pageSize = 12
   
-  constructor() { }
+  constructor(
+    private route: ActivatedRoute, 
+    private router: Router
+  ) { }
 
   ngOnInit(): void {}
   
@@ -43,8 +47,14 @@ export class TablaTypeSystemRevisionComponent implements OnInit {
   }
 
   setUpdateData(id, status) {
-    if (status != 'completed') this.updateData.emit(id)
-    else Swal.fire({text: 'No se puede actualizar esta revisión ya que esta completa.'})
+    if (status != 'completed') return this.redirectTo(`type-system/${this.route.snapshot.paramMap.get('type_system_id')}/revision/preview/${id}`)
+    else return Swal.fire({text: 'No se puede actualizar esta revisión ya que esta completa.'})
+  }
+
+  redirectTo(uri: string) {
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(
+      () => this.router.navigate([uri])
+    );
   }
 
   getStatusFill(status) {

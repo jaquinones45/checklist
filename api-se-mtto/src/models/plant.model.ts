@@ -50,7 +50,6 @@ class plantModel {
             AND name = '${name}'
             AND deleted = 0
         `
-        console.log(validate)
         const result_validate = await conn.query(validate);
         if (result_validate.recordset.length) result.error = `El nombre <b>${name}</b> ya esta registrado`
         else {
@@ -94,7 +93,6 @@ class plantModel {
             AND deleted = 0
             AND id != ${id}
         `
-        console.log(validate)
         const result_validate = await conn.query(validate);
 
         if (result_validate.recordset.length) result.error = `El nombre <b>${name}</b> ya esta registrado`

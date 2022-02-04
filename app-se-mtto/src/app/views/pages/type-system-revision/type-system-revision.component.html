@@ -3,7 +3,7 @@
 </div>
 
 <div class="row">
-  <div class="col-12 col-md-7 grid-margin stretch-card">
+  <div class="col-12 col-md-12 grid-margin stretch-card">
     <div class="card overflow-hidden">
       <div class="card-body">
         <div class="row">
@@ -23,6 +23,19 @@
                 <i 
                   (click)="goBack()"
                   class="feather icon-arrow-left"
+                  style="cursor: pointer;font-size: 20px;color: #C4C4C4;"
+                ></i>
+              </a>
+              <a 
+                mat-button href="javascript:void(0)" 
+                class="pr-1"
+                data-toggle="tooltip" 
+                data-placement="top" 
+                title="Crear revisión"
+              >
+                <i 
+                  (click)="redirectPreview()"
+                  class="feather icon-plus"
                   style="cursor: pointer;font-size: 20px;color: #C4C4C4;"
                 ></i>
               </a>
@@ -64,8 +77,6 @@
         <app-tabla-type-system-revision
           [data]=responseTypeSystemRevision
           (salida)="setTypeSystemRevision($event)"
-          (refresh)="setRefresh($event)"
-          (updateData)="setUpdateData($event)"
           *ngIf="responseTypeSystemRevision.length > 0"
         ></app-tabla-type-system-revision>
         <div 
@@ -75,155 +86,6 @@
         >
           <div class="fc-event-page fc-h-event">
             <p class="m-0" style="font-size: 14px">No se encontraron registros de las revisiones.</p>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-  <div class="col-12 col-md-5  grid-margin stretch-card">
-    <div class="card overflow-hidden">
-      <div class="card-body">
-        <div class="row">
-          <div class="col-10">
-            <div class="titulo">{{ form.update ? 'EDICCIÓN' : 'CREACIÓN' }} DE REVISIÓN</div>
-            <div class="subtitulo mb-2">Formulario de la creación de revision del tipo de sistema.</div>
-          </div>
-          <div class="col-2">
-            <div class="d-flex justify-content-end">
-              <a 
-                mat-button href="javascript:void(0)" 
-                class="pr-1"
-                data-toggle="tooltip" 
-                data-placement="top" 
-                title="Nueva Revisión"
-              >
-                <i 
-                  (click)="newRevision()"
-                  class="feather icon-trash-2"
-                  style="cursor: pointer;font-size: 20px;color: #C4C4C4;"
-                ></i>
-              </a>
-            </div>
-          </div>
-          <div class="col-12">
-            <div class="row pb-2">
-              <div class="col-6">
-                <label for="name" class="block">Responsable *</label>
-                <input 
-                    id="name" 
-                    type="text" 
-                    class="form-control form-control-sm text-sm cusFilter"
-                    [(ngModel)]="form.responsable"
-                    placeholder="Responsable"
-                />
-              </div>
-              <div class="col-6">
-                <label for="name" class="block">Fecha *</label>
-                <ejs-datepicker
-                  [value]="form.date"
-                  placeholder="FECHA DE CONSULTA"
-                  (change)="onChangeDate($event)"
-                ></ejs-datepicker>
-              </div>
-            </div>
-            <div class="row pb-2">
-              <div class="col-6">
-                <label for="name" class="block">Horas *</label>
-                <input 
-                  id="hours" 
-                  type="number" 
-                  class="form-control form-control-sm text-sm cusFilter"
-                  [(ngModel)]="form.hours"
-                  placeholder="Horas"
-                  min="0"
-                />
-              </div>
-              <div class="col-6">
-                <div class="form-group">
-                  <label class="control-label">Componente *</label>
-                  <ejs-dropdownlist 
-                    id='ddlelement1' 
-                    class="col-12 p-0" 
-                    [dataSource]='responseTypeComponent'
-                    [fields]="{ text: 'name', value: 'id' }"
-                    [(value)]='form.type_component_id'
-                    (select)="selectComponent($event)"
-                  ></ejs-dropdownlist>
-                </div>
-              </div>
-            </div>
-            <div class="row pb-2">
-              <div class="col-6">
-                <div class="form-group">
-                  <label class="control-label">Lista de revision *</label>
-                  <ejs-dropdownlist 
-                    id='ddlelement1' 
-                    class="col-12 p-0" 
-                    [dataSource]='responseForm'
-                    [fields]="{ text: 'name', value: 'id' }"
-                    [(value)]='form.form_id'
-                    (select)="selectForm($event)"
-                    *ngIf="loadFormName"
-                  ></ejs-dropdownlist>
-                </div>
-              </div>
-            </div>
-            
-          </div>
-          
-        </div>
-
-        <div class="table-responsive mt-3" *ngIf="form.questions.length > 0">
-          <table class="table table-sm">
-            <thead>
-              <tr class="font-overpass">
-                <th class="text-left" style="width:15%">Evaluación</th>
-                <th class="text-left" style="width:25%">Resultado</th>
-                <th class="text-left" style="width:60%">Notas</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let element of form.questions">
-                <td class="text-left p-1">{{ element.question }}</td>
-                <td class="text-left p-1">
-                  <ejs-dropdownlist 
-                    id='ddlelement1' 
-                    class="col-12 p-0" 
-                    [dataSource]='responseTypeQuestion'
-                    [fields]="{ text: 'name', value: 'id' }"
-                    [(value)]='element.type_question_id'
-                  ></ejs-dropdownlist>
-                </td>
-                <td class="text-left p-1">
-                  <textarea 
-                    class="form-control form-control-sm text-sm cusFilter"
-                    [(ngModel)]="element.notes"
-                    rows="1"
-                    *ngIf="element.type_question_id == 2"
-                  ></textarea>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="row pt-2 text-center">
-          <div class="col-12">
-            <button 
-              class="btn btn-outline-success btn-sm mr-1" 
-              type="button"
-              (click)="saveOrUpdateRevision('previous')"
-            >
-              <i class="feather icon-save"></i> Guardar y continuar
-            </button>
-            <button 
-              class="btn btn-outline-success btn-sm ml-1" 
-              type="button"
-              (click)="saveOrUpdateRevision('completed')"
-            >
-              <i class="feather icon-save"></i> Guardar y completar
-            </button>
           </div>
         </div>
 

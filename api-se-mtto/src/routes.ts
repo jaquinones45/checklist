@@ -201,6 +201,15 @@ router.route("/api/type-system/:id").put(typeSystem.updateTypeSystem);
 router.route("/api/type-system/updateRevision/:id").put(typeSystem.updateTypeSystemRevision);
 
 /**
+  * Api Tipo Sistema
+  * @query {string} name el nombre del tipo de sistema a filtrar.
+  * @query {int} plant_id el id de la planta a filtrar.
+  * @query {date} date la fecha del tipo de sistema a filtrar.
+  * @query {int} client_id el id del tipo de sistema a filtrar.
+*/
+router.route("/api/routine-mtto/getOneRevision/:revision_id").get(routineMtto.getOneRoutineMttoRevision);
+
+/**
  * Api Tipo Sistema
  * @query {string} name el nombre del tipo de sistema a filtrar.
  * @query {int} plant_id el id de la planta a filtrar.
@@ -214,6 +223,18 @@ router.route("/api/routine-mtto").get(routineMtto.getRoutineMtto);
   * @query {string} client_id el id del cliente a filtrar.
 */
 router.route("/api/mtto-corrective/getPlantName").get(mttoCorrective.getPlantName);
+
+/**
+  * Api Mantenimiento Correctivo Planta
+  * @query {string} client_id el id del cliente a filtrar.
+*/
+router.route("/api/mtto-corrective/getSystemName").get(mttoCorrective.getSystemName);
+
+/**
+  * Api Mantenimiento Correctivo Planta
+  * @query {string} client_id el id del cliente a filtrar.
+*/
+router.route("/api/mtto-corrective/getComponentName").get(mttoCorrective.getComponentName);
 
 /**
   * Api Mantenimiento Correctivo Equipo

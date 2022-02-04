@@ -56,38 +56,21 @@ class formModel {
         const conn = await db.connect();
         const query = `
           SELECT
-            [form].id AS form_id, 
-            [form].name, 
-            [form].country_id, 
-            [form].type_component_id,
-            [question].id AS question_id,
-            [question].name AS question_name,
-            [question].question AS question
-          FROM [form]
-          INNER JOIN [question] ON [question].form_id = [form].id
-          WHERE [form].id = ${id}
-            AND [form].deleted = 0
-            AND [question].deleted = 0
-          ORDER BY [form].id DESC
+            [revision].id, 
+            [revision].responsable, 
+            [revision].date, 
+            [revision].hours, 
+            [revision].status,
+            [revision].system_id,
+            [revision].form_id
+          FROM [revision]
+          WHERE [revision].id = ${id}
+            AND [revision].deleted = 0
+          ORDER BY [revision].id DESC
         `
-        console.log(query)
         const result = await conn.query(query);
-        // lodash
-        const data = lodash
-          .chain(result.recordset)
-          .groupBy('form_id')
-          .map((value, key) => ({
-            id: parseInt(key),
-            name: value[0].name,
-            country_id: value[0].country_id,
-            type_component_id: value[0].type_component_id,
-            total: value.length,
-            questions: value
-          }))
-          .value();
-          console.log(data)
         // retornar los datos
-        resolve(data[0]);
+        resolve(result.recordset[0]);
       } catch (error) {
         console.error("An error ocurred getOneFormDB: ", error);
         reject(error);
@@ -174,7 +157,6 @@ class formModel {
               AND deleted = 0
             ORDER BY id DESC
           `
-          console.log(select_form)
           const result_form = await conn.query(select_form);
           this.insertFormQuestion(result_form.recordset[0].id, questions)
             
@@ -211,7 +193,6 @@ class formModel {
             AND form_id = ${form_id}
             AND deleted = 0
         `
-        console.log(validate)
         const result_validate = await conn.query(validate);
         if (result_validate.recordset.length) result.error = `El nombre ${name} ya esta registrado`
         else {
@@ -221,7 +202,6 @@ class formModel {
             VALUES
               ('${name}', '${question}', ${form_id})
           `
-          console.log(query)
           await conn.query(query);
           
           result.message = `Se creo la pregunta <b>${name}</b> exitosamente.`
@@ -275,7 +255,6 @@ class formModel {
             DELETE FROM [question] 
             WHERE form_id = ${id};
           `
-          console.log(deleted)
           await conn.query(deleted);
 
           this.insertFormQuestion(id, questions)
@@ -350,7 +329,6 @@ class formModel {
         VALUES
           ('${question.name}', ${question.question}, ${form_id})
       `
-      console.log(query)
       await conn.query(query);
     })
   }

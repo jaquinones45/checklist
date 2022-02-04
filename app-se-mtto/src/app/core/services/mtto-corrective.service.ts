@@ -28,16 +28,38 @@ export class MttoCorrectiveService {
             .pipe(retry(3), catchError(this.handleError));
     }
 
-    getEquipmentName<T>(param): Observable<T> {
+    getSystemName<T>(param): Observable<T> {
         let httpParams = new HttpParams();
-        if (param.client_id && param.client_id != undefined) httpParams = httpParams.append('client_id', param.client_id)
+        if (param.plant_id && param.plant_id != undefined) httpParams = httpParams.append('plant_id', param.plant_id)
 
         const options = {
             params: httpParams,
             headers: new HttpHeaders({}),
         };
         return this.http
-            .get<T>(`${this.URL_API}/getEquipmentName`, options)
+            .get<T>(`${this.URL_API}/getSystemName`, options)
+            .pipe(retry(3), catchError(this.handleError));
+    }
+
+    getComponentName<T>(param): Observable<T> {
+        let httpParams = new HttpParams();
+        if (param.type_system_id && param.type_system_id != undefined) httpParams = httpParams.append('type_system_id', param.type_system_id)
+
+        const options = {
+            params: httpParams,
+            headers: new HttpHeaders({}),
+        };
+        return this.http
+            .get<T>(`${this.URL_API}/getComponentName`, options)
+            .pipe(retry(3), catchError(this.handleError));
+    }
+
+    getOneTypeSystemRevision<T>(revision_id): Observable<T> {
+        const options = {
+            headers: new HttpHeaders({}),
+        };
+        return this.http
+            .get<T>(`${this.URL_API}/getOneRevision/${revision_id}`, options)
             .pipe(retry(3), catchError(this.handleError));
     }
     

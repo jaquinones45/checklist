@@ -20,6 +20,38 @@ class mttoCorrectiveController {
     })
   }
 
+  static async getSystemName(
+    plant_id:any | undefined, 
+  ): Promise<object> {
+    return new Promise( async (resolve, reject) => {
+      try {
+        const res = await mttoCorrectiveModel.getSystemNameDB(
+          plant_id
+        )
+        resolve(res);
+      } catch (error) {
+        console.error("An error ocurred getSystemName: ",error);
+        reject(error);
+      }
+    })
+  }
+
+  static async getComponentName(
+    type_system_id:any | undefined, 
+  ): Promise<object> {
+    return new Promise( async (resolve, reject) => {
+      try {
+        const res = await mttoCorrectiveModel.getComponentNameDB(
+          type_system_id
+        )
+        resolve(res);
+      } catch (error) {
+        console.error("An error ocurred getComponentName: ",error);
+        reject(error);
+      }
+    })
+  }
+
   static async getEquipmentName(
     client_id:any | undefined, 
   ): Promise<object> {
@@ -37,7 +69,7 @@ class mttoCorrectiveController {
   }
 
   static async getMttoCorrective(
-    name:any | undefined, 
+    description:any | undefined, 
     plant_id:any | undefined, 
     date:any | undefined, 
     client_id:any | undefined,
@@ -45,7 +77,7 @@ class mttoCorrectiveController {
     return new Promise( async (resolve, reject) => {
       try {
         const res = await mttoCorrectiveModel.getMttoCorrectiveDB(
-          name, plant_id, date, client_id
+          description, plant_id, date, client_id
         )
         resolve(res);
       } catch (error) {
@@ -56,17 +88,20 @@ class mttoCorrectiveController {
   }
 
   static async saveMttoCorrective(
+    responsable:any | undefined,
+    date:any | undefined,
+    hours:any | undefined,
     description:any | undefined,
     notes:any | undefined,
-    hours:any | undefined,
+    equipment:any | undefined,
     plant_id:any | undefined,
-    equipment_id:any | undefined,
+    type_component_system_id:any | undefined,
     client_id:any | undefined,
   ): Promise<object> {
     return new Promise( async (resolve, reject) => {
       try {
         const res = await mttoCorrectiveModel.saveMttoCorrectiveDB(
-          description, notes, hours, plant_id, equipment_id, client_id
+          responsable, date, hours, description, notes, equipment, plant_id, type_component_system_id, client_id
         )
         resolve(res);
       } catch (error) {
@@ -78,17 +113,20 @@ class mttoCorrectiveController {
 
   static async updateMttoCorrective(
     id:any | undefined, 
+    responsable:any | undefined,
+    date:any | undefined,
+    hours:any | undefined,
     description:any | undefined,
     notes:any | undefined,
-    hours:any | undefined,
+    equipment:any | undefined,
     plant_id:any | undefined,
-    equipment_id:any | undefined,
+    type_component_system_id:any | undefined,
     client_id:any | undefined,
   ): Promise<object> {
     return new Promise( async (resolve, reject) => {
       try {
         const res = await mttoCorrectiveModel.updateMttoCorrectiveDB(
-          id, description, notes, hours, plant_id, equipment_id, client_id
+          id, responsable, date, hours, description, notes, equipment, plant_id, type_component_system_id, client_id
         )
         resolve(res);
       } catch (error) {
